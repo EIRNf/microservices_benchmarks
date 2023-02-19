@@ -17,8 +17,13 @@ services:
       - LOG_LEVEL
     build: .
     image: hotel_reserv_frontend_single_node
-    entrypoint: frontend
     container_name: 'hotel_reserv_frontend'
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - seccomp:unconfined
+    entrypoint: [ "perf", "stat", "-r5", "go", "run", "frontend" ]
+    #entrypoint: frontend
     ports:
       - "5000:5000"
     depends_on:
