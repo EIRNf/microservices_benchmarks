@@ -40,7 +40,9 @@ podAnnotations: {}
 podSecurityContext: {}
 
 securityContext: {}
-# capabilities:
+capabilities:
+  add:
+  - SYS_PTRACE
   #   drop:
   #   - ALL
   # readOnlyRootFilesystem: true

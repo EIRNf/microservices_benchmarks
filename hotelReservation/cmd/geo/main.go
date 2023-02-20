@@ -14,9 +14,17 @@ import (
 	"github.com/harlow/go-micro-services/tune"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+
+	pyroscope "github.com/pyroscope-io/pyroscope/pkg/agent/profiler"
 )
 
 func main() {
+
+	pyroscope.Start(pyroscope.Config{
+		ApplicationName: os.Getenv("APPLICATION_NAME"),
+		ServerAddress:   os.Getenv("SERVER_ADDRESS"),
+	})
+
 	tune.Init()
 	log.Logger = zerolog.New(zerolog.ConsoleWriter{Out: os.Stdout, TimeFormat: time.RFC3339}).With().Timestamp().Caller().Logger()
 
