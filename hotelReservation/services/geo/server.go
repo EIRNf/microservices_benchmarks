@@ -23,8 +23,6 @@ import (
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"
-
-	pyroscope "github.com/pyroscope-io/pyroscope/pkg/agent/profiler"
 )
 
 const (
