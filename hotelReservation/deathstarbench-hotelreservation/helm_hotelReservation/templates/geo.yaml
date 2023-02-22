@@ -17,6 +17,9 @@ spec:
   selector:
     {{- include "hotelres.selectorLabels" . | nindent 4 }}
     app-name: geo
+  volumes:
+    - name: output-storage
+    emptyDir: {}
 
 {{- if (include "hotelres.get" (list .Values "geo" "autoscaling.enabled" "json") | mustFromJson) }}
 ---
