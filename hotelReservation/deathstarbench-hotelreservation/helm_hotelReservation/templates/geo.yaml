@@ -156,10 +156,10 @@ spec:
           ports:
             - containerPort: 8083
           env:
-            - name: SERVER_ADDRESS # To change Pyroscope Server Port change the value
+            - name: PYROSCOPE_SERVER_ADDRESS # To change Pyroscope Server Port change the value
             # "http://pyroscope:4040"
               value: "10.97.84.130:4040"
-            - name: APPLICATION_NAME # Application name shown in the UI
+            - name: PYROSCOPE_APPLICATION_NAME # Application name shown in the UI
               value: "geo.service" 
             - name: TLS
               value: {{ include "hotelres.get" (list .Values "geo" "features.tls") | quote }}

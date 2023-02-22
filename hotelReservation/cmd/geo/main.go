@@ -20,9 +20,14 @@ import (
 
 func main() {
 
-	pyroscope.Start(pyroscope.Config{
-		ApplicationName: os.Getenv("APPLICATION_NAME"),
-		ServerAddress:   os.Getenv("SERVER_ADDRESS"),
+	serverAddress := os.Getenv("PYROSCOPE_SERVER_ADDRESS")
+	if serverAddress == "" {
+		serverAddress = "10.97.84.130:4040"
+	}
+	_, err := pyroscope.Start(pyroscope.Config{
+		ApplicationName: "geo.service",
+		ServerAddress:   serverAddress,
+		Logger:          pyroscope.StandardLogger,
 	})
 
 	tune.Init()
