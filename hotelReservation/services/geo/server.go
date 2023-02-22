@@ -9,7 +9,7 @@ import (
 
 	// "io/ioutil"
 	"net"
-	// "os"
+	"os"
 	"time"
 
 	"github.com/google/uuid"
@@ -23,6 +23,8 @@ import (
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"
+
+	pyroscope "github.com/pyroscope-io/client/pyroscope"
 )
 
 const (
@@ -45,6 +47,21 @@ type Server struct {
 
 // Run starts the server
 func (s *Server) Run() error {
+
+	serverAddress := os.Getenv("PYROSCOPE_SERVER_ADDRESS")
+	applicationName := os.Getenv("PYROSCOPE_APPLICATION_NAME")
+	if serverAddress == "" {
+		serverAddress = "http://pyroscope:4040"
+	}
+	if applicationName == "" {
+		applicationName = "geo.service"
+	}
+	_, err := pyroscope.Start(pyroscope.Config{
+		ApplicationName: applicationName,
+		ServerAddress:   serverAddress,
+		Logger:          pyroscope.StandardLogger,
+	})
+
 	if s.Port == 0 {
 		return fmt.Errorf("server port must be set")
 	}
