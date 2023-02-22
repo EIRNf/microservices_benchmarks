@@ -22,7 +22,7 @@ func main() {
 
 	serverAddress := os.Getenv("PYROSCOPE_SERVER_ADDRESS")
 	if serverAddress == "" {
-		serverAddress = "10.97.84.130:4040"
+		serverAddress = "http://pyroscope:4040"
 	}
 	_, err := pyroscope.Start(pyroscope.Config{
 		ApplicationName: "geo.service",
