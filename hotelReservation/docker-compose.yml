@@ -69,8 +69,6 @@ services:
       - GC
       - JAEGER_SAMPLE_RATIO
       - LOG_LEVEL
-      - PYROSCOPE_SERVER_ADDRESS=10.97.84.130:4040
-      - PYROSCOPE_APPLICATION_NAME=geo.service
     build: .
     image: hotel_reserv_geo_single_node
     entrypoint: geo

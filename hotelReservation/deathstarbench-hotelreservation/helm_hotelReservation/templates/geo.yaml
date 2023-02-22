@@ -19,7 +19,7 @@ spec:
     app-name: geo
   volumes:
     - name: output-storage
-    emptyDir: {}
+      emptyDir: {}
 
 {{- if (include "hotelres.get" (list .Values "geo" "autoscaling.enabled" "json") | mustFromJson) }}
 ---
@@ -162,7 +162,7 @@ spec:
           env:
             - name: PYROSCOPE_SERVER_ADDRESS # To change Pyroscope Server Port change the value
             # "http://pyroscope:4040"
-              value: "10.97.84.130:4040"
+              value: "http://pyroscope:4040"
             - name: PYROSCOPE_APPLICATION_NAME # Application name shown in the UI
               value: "geo.service" 
             - name: TLS
