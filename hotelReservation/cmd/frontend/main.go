@@ -14,9 +14,22 @@ import (
 	"github.com/harlow/go-micro-services/tune"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+
+	pyroscope "github.com/pyroscope-io/client/pyroscope"
 )
 
 func main() {
+
+	serverAddress := os.Getenv("PYROSCOPE_SERVER_ADDRESS")
+	if serverAddress == "" {
+		serverAddress = "http://pyroscope:4040"
+	}
+	_, err := pyroscope.Start(pyroscope.Config{
+		ApplicationName: "frontend.service",
+		ServerAddress:   serverAddress,
+		Logger:          pyroscope.StandardLogger,
+	})
+
 	tune.Init()
 	log.Logger = zerolog.New(zerolog.ConsoleWriter{Out: os.Stdout, TimeFormat: time.RFC3339}).With().Timestamp().Caller().Logger()
 
