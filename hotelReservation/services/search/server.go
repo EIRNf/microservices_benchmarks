@@ -8,7 +8,7 @@ import (
 
 	"github.com/rs/zerolog/log"
 
-	// "os"
+	"os"
 	"time"
 
 	"github.com/google/uuid"
@@ -23,6 +23,8 @@ import (
 	context "golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"
+
+	pyroscope "github.com/pyroscope-io/client/pyroscope"
 )
 
 const name = "srv-search"
@@ -42,6 +44,37 @@ type Server struct {
 
 // Run starts the server
 func (s *Server) Run() error {
+
+	serverAddress := os.Getenv("PYROSCOPE_SERVER_ADDRESS")
+	applicationName := os.Getenv("PYROSCOPE_APPLICATION_NAME")
+	if serverAddress == "" {
+		serverAddress = "http://pyroscope:4040"
+	}
+	if applicationName == "" {
+		applicationName = "search.service"
+	}
+	_, err := pyroscope.Start(pyroscope.Config{
+		ApplicationName: applicationName,
+		ServerAddress:   serverAddress,
+		Logger:          pyroscope.StandardLogger,
+
+		ProfileTypes: []pyroscope.ProfileType{
+			// these profile types are enabled by default:
+			pyroscope.ProfileCPU,
+			pyroscope.ProfileAllocObjects,
+			pyroscope.ProfileAllocSpace,
+			pyroscope.ProfileInuseObjects,
+			pyroscope.ProfileInuseSpace,
+
+			// these profile types are optional:
+			pyroscope.ProfileGoroutines,
+			pyroscope.ProfileMutexCount,
+			pyroscope.ProfileMutexDuration,
+			pyroscope.ProfileBlockCount,
+			pyroscope.ProfileBlockDuration,
+		},
+	})
+
 	if s.Port == 0 {
 		return fmt.Errorf("server port must be set")
 	}

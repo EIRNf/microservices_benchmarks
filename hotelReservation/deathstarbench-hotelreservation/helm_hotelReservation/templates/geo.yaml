@@ -159,7 +159,6 @@ spec:
             - containerPort: 8083
           env:
             - name: PYROSCOPE_SERVER_ADDRESS # To change Pyroscope Server Port change the value
-            # "http://pyroscope:4040"
               value: "http://pyroscope:4040"
             - name: PYROSCOPE_APPLICATION_NAME # Application name shown in the UI
               value: "geo.service" 
