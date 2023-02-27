@@ -73,6 +73,10 @@ func (s *Server) Run() error {
 		},
 	})
 
+	if err != nil {
+		log.Err(err).Str("service", serverAddress)
+	}
+
 	if s.Port == 0 {
 		return fmt.Errorf("Server port must be set")
 	}
