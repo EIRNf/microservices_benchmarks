@@ -20,6 +20,8 @@ import (
 
 func main() {
 
+	log.Logger = zerolog.New(zerolog.ConsoleWriter{Out: os.Stdout, TimeFormat: time.RFC3339}).With().Timestamp().Caller().Logger()
+
 	serverAddress := os.Getenv("PYROSCOPE_SERVER_ADDRESS")
 	log.Info().Msg(serverAddress)
 	if serverAddress == "" {
@@ -33,7 +35,6 @@ func main() {
 	})
 
 	tune.Init()
-	log.Logger = zerolog.New(zerolog.ConsoleWriter{Out: os.Stdout, TimeFormat: time.RFC3339}).With().Timestamp().Caller().Logger()
 
 	log.Info().Msg("Reading config...")
 	jsonFile, err := os.Open("config.json")
