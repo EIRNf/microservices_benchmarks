@@ -24,6 +24,8 @@ func main() {
 
 	serverAddress := os.Getenv("PYROSCOPE_SERVER_ADDRESS")
 	log.Info().Msg(serverAddress)
+	log.Info().Msg("THIS WORKS DEADBEEF")
+
 	if serverAddress == "" {
 		serverAddress = "http://pyroscope:4040"
 		log.Info().Msg(serverAddress)
