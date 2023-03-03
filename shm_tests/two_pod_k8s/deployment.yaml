@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: ipc_example
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    spec:
+      containers:
+        - image: eirn/ipc:latest
+          name: producer
+          command: ["./ipc", "-producer"]
+        - image: eirn/ipc:latest
+          name: consumer
+          command: ["./ipc", "-consumer"]
+      restartPolicy: Never
+status: {}
