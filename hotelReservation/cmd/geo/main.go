@@ -21,6 +21,7 @@ import (
 func main() {
 
 	serverAddress := os.Getenv("PYROSCOPE_SERVER_ADDRESS")
+	log.Info().Msg(serverAddress)
 	if serverAddress == "" {
 		serverAddress = "http://pyroscope:4040"
 	}
@@ -28,6 +29,7 @@ func main() {
 		ApplicationName: "geo.service",
 		ServerAddress:   serverAddress,
 		Logger:          pyroscope.StandardLogger,
+		log.Info().Msg(serverAddress),
 	})
 
 	tune.Init()
