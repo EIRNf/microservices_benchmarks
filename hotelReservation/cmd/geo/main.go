@@ -33,8 +33,6 @@ func main() {
 		Logger:          pyroscope.StandardLogger,
 	})
 
-	log.Info().Msg(err.Error())
-
 	tune.Init()
 
 	log.Info().Msg("Reading config...")

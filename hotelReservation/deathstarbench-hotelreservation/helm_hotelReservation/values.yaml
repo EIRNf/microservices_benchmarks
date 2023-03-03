@@ -26,8 +26,8 @@ serviceAccount:
 replicaCount: 1
 
 image:
-  repository: lianhao/dsbpp_hotel_reserv
-  pullPolicy: IfNotPresent
+  repository: eirn/dsbpp_hotel_reserv
+  pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
 

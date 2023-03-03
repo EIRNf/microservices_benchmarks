@@ -24,19 +24,16 @@ func main() {
 
 	serverAddress := os.Getenv("PYROSCOPE_SERVER_ADDRESS")
 	log.Info().Msg(serverAddress)
-	log.Info().Msg("THIS WORKS DEADBEEF")
+	log.Info().Msg("THIS WORKS deadbeef")
 
 	if serverAddress == "" {
 		serverAddress = "http://pyroscope:4040"
-		log.Info().Msg(serverAddress)
 	}
 	_, err := pyroscope.Start(pyroscope.Config{
 		ApplicationName: "frontend.service",
 		ServerAddress:   serverAddress,
 		Logger:          pyroscope.StandardLogger,
 	})
-
-	log.Info().Msg(err.Error())
 
 	tune.Init()
 
