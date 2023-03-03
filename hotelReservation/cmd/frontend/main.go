@@ -32,8 +32,9 @@ func main() {
 		ApplicationName: "frontend.service",
 		ServerAddress:   serverAddress,
 		Logger:          pyroscope.StandardLogger,
-		log.Info().Msg("Starting Pyroscope profiling"),
 	})
+
+	log.Info().Msg(err)
 
 	tune.Init()
 

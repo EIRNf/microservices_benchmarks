@@ -31,8 +31,9 @@ func main() {
 		ApplicationName: "geo.service",
 		ServerAddress:   serverAddress,
 		Logger:          pyroscope.StandardLogger,
-		log.Info().Msg(serverAddress),
 	})
+
+	log.Info().Msg(err)
 
 	tune.Init()
 
