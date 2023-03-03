@@ -15,6 +15,8 @@ services:
       - GC
       - JAEGER_SAMPLE_RATIO
       - LOG_LEVEL
+      - PYROSCOPE_SERVER_ADDRESS
+      - PYROSCOPE_APPLICATION_NAME 
     build: .
     image: hotel_reserv_frontend_single_node
     container_name: 'hotel_reserv_frontend'
@@ -37,6 +39,8 @@ services:
       - JAEGER_SAMPLE_RATIO
       - MEMC_TIMEOUT
       - LOG_LEVEL
+      - PYROSCOPE_SERVER_ADDRESS
+      - PYROSCOPE_APPLICATION_NAME 
     build: .
     image: hotel_reserv_profile_single_node
     entrypoint: profile
@@ -60,6 +64,8 @@ services:
       - GC
       - JAEGER_SAMPLE_RATIO
       - LOG_LEVEL
+      - PYROSCOPE_SERVER_ADDRESS
+      - PYROSCOPE_APPLICATION_NAME 
       # - GRPC_GO_LOG_VERBOSITY_LEVEL=2
       # - GRPC_GO_LOG_SEVERITY_LEVEL=info
 
