@@ -33,7 +33,7 @@ func main() {
 		Logger:          pyroscope.StandardLogger,
 	})
 
-	log.Info().Msg(err)
+	log.Info().Msg(err.Error())
 
 	tune.Init()
 
