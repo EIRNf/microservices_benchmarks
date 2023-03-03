@@ -4,15 +4,18 @@ metadata:
   name: ipc_example
 spec:
   replicas: 1
-  strategy: {}
+  selector:
+    matchLabels:
+      app: ipc_example
   template:
-    spec:
-      containers:
-        - image: eirn/ipc:latest
-          name: producer
-          command: ["./ipc", "-producer"]
-        - image: eirn/ipc:latest
-          name: consumer
-          command: ["./ipc", "-consumer"]
-      restartPolicy: Never
-status: {}
+    metadata:
+      labels:
+        app: ipc_example
+    containers:
+    - image: eirn/ipc:latest
+      name: producer
+      command: ["./ipc", "-producer"]
+    - image: eirn/ipc:latest
+      name: consumer
+      command: ["./ipc", "-consumer"]
+    restartPolicy: Never
