@@ -1,0 +1,2 @@
+docker build --push -t eirn/ipc:latest .
+kubectl create

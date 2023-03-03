@@ -1,0 +1,2 @@
+docker run -d --name ipc_producer --ipc shareable basic_shm -producer
+docker run -d --name ipc_consumer --ipc container:ipc_producer basic_shm -consumer
