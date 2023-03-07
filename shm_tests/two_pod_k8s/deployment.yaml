@@ -6,11 +6,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ipc_example
+      app: ipc-example
   template:
     metadata:
       labels:
-        app: ipc_example
+        app: ipc-example
     spec:
       containers:
       - image: eirn/ipc:latest
