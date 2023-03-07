@@ -4,11 +4,11 @@ metadata:
   name: ipc-example-producer
 spec:
   hostIPC: true
-  initContainers:
+  containers:
   - name: producer
     image: eirn/ipc
     command: ["./ipc", "-producer"]
-  restartPolicy: Never
+  restartPolicy: Always
   hostIPC: true
 --- 
 apiVersion: v1
@@ -21,5 +21,5 @@ spec:
   - name: consumer
     image: eirn/ipc
     command: ["./ipc", "-consumer"]
-  restartPolicy: Never
+  restartPolicy: Always
   hostIPC: true
