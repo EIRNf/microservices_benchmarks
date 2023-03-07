@@ -16,9 +16,8 @@ spec:
       - image: eirn/ipc:latest
         name: producer
         command: ["./ipc", "-producer"]
-        hostipc: true
       - image: eirn/ipc:latest
         name: consumer
         command: ["./ipc", "-consumer"]
-        hostipc: true
       restartPolicy: Never
+      hostIPC: true
