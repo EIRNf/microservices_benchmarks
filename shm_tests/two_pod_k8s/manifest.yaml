@@ -4,7 +4,7 @@ metadata:
   name: ipc-example-producer
 spec:
   hostIPC: true
-  containers:
+  initContainers:
   - name: producer
     image: eirn/ipc
     command: ["./ipc", "-producer"]
