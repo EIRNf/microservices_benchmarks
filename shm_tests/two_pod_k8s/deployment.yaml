@@ -1,21 +1,39 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ipc-example
+  name: ipc-example-producer
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ipc-example
+      app: ipc-example-producer
   template:
     metadata:
       labels:
-        app: ipc-example
+        app: ipc-example-producer
     spec:
       containers:
       - image: eirn/ipc:latest
         name: producer
         command: ["./ipc", "-producer"]
+      restartPolicy: Never
+      hostIPC: true
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ipc-example-consumer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ipc-example-consumer
+  template:
+    metadata:
+      labels:
+        app: ipc-example-consumer
+    spec:
+      containers:
       - image: eirn/ipc:latest
         name: consumer
         command: ["./ipc", "-consumer"]
