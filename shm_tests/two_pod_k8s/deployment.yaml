@@ -12,11 +12,12 @@ spec:
     metadata:
       labels:
         app: ipc_example
-    containers:
-    - image: eirn/ipc:latest
-      name: producer
-      command: ["./ipc", "-producer"]
-    - image: eirn/ipc:latest
-      name: consumer
-      command: ["./ipc", "-consumer"]
-    restartPolicy: Never
+    spec:
+      containers:
+      - image: eirn/ipc:latest
+        name: producer
+        command: ["./ipc", "-producer"]
+      - image: eirn/ipc:latest
+        name: consumer
+        command: ["./ipc", "-consumer"]
+      restartPolicy: Never
