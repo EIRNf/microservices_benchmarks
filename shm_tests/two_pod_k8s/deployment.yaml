@@ -16,7 +16,7 @@ spec:
       - image: eirn/ipc:latest
         name: producer
         command: ["./ipc", "-producer"]
-      restartPolicy: Never
+      restartPolicy: Always
       hostIPC: true
 ---
 apiVersion: apps/v1
@@ -37,5 +37,5 @@ spec:
       - image: eirn/ipc:latest
         name: consumer
         command: ["./ipc", "-consumer"]
-      restartPolicy: Never
+      restartPolicy: Always
       hostIPC: true
