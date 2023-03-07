@@ -3,7 +3,6 @@ kind: Deployment
 metadata:
   name: ipc_example
 spec:
-  hostipc: true
   replicas: 1
   selector:
     matchLabels:
@@ -13,6 +12,7 @@ spec:
       labels:
         app: ipc_example
     spec:
+      hostipc: true
       containers:
       - image: eirn/ipc:latest
         name: producer
