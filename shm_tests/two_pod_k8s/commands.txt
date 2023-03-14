@@ -1,4 +1,4 @@
 docker build --push -t eirn/ipc:latest .
 kubectl create -f manifest.yaml
-kubectl logs ipc-example -c consumer
-kubectl logs ipc-example -c producer
+kubectl logs ipc-example-consumer
+kubectl logs ipc-example-producer
