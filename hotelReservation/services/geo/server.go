@@ -25,11 +25,6 @@ import (
 	"google.golang.org/grpc/keepalive"
 
 	pyroscope "github.com/pyroscope-io/client/pyroscope"
-	otelpyroscope "github.com/pyroscope-io/otel-profiling-go"
-	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/exporters/stdout/stdouttrace"
-	"go.opentelemetry.io/otel/propagation"
-	"go.opentelemetry.io/otel/sdk/trace"
 )
 
 const (
@@ -61,13 +56,6 @@ func (s *Server) Run() error {
 	if applicationName == "" {
 		applicationName = "geo.service"
 	}
-	tp := initTracer(applicationName, serverAddress)
-	defer func() {
-		if err := tp.Shutdown(context.Background()); err != nil {
-			log.Printf("Error shutting down tracer provider: %v", err)
-		}
-	}()
-
 
 	_, err := pyroscope.Start(pyroscope.Config{
 		ApplicationName: applicationName,
@@ -90,8 +78,6 @@ func (s *Server) Run() error {
 			pyroscope.ProfileBlockDuration,
 		},
 	})
-
-
 
 	if err != nil {
 		log.Err(err).Str("service", serverAddress)
@@ -163,31 +149,6 @@ func (s *Server) Run() error {
 	return srv.Serve(lis)
 }
 
-func initTracer(appName, pyroscopeEndpoint string) *trace.TracerProvider {
-	exporter, err := stdouttrace.New(stdouttrace.WithPrettyPrint())
-	if err != nil {
-		log.Fatal(err)
-	}
-	tp := trace.NewTracerProvider(
-		trace.WithSampler(trace.AlwaysSample()),
-		trace.WithBatcher(exporter),
-	)
-	otel.SetTracerProvider(otelpyroscope.NewTracerProvider(tp,
-		otelpyroscope.WithAppName(appName),
-		otelpyroscope.WithPyroscopeURL(pyroscopeEndpoint),
-		otelpyroscope.WithRootSpanOnly(true),
-		otelpyroscope.WithAddSpanName(true),
-		otelpyroscope.WithProfileURL(true),
-		otelpyroscope.WithProfileBaselineURL(true),
-	))
-	otel.SetTextMapPropagator(propagation.NewCompositeTextMapPropagator(
-		propagation.TraceContext{},
-		propagation.Baggage{},
-	))
-	return tp
-}
-
-
 // Shutdown cleans up any processes
 func (s *Server) Shutdown() {
 	s.Registry.Deregister(s.uuid)
@@ -213,10 +174,6 @@ func (s *Server) Nearby(ctx context.Context, req *pb.Request) (*pb.Result, error
 }
 
 func (s *Server) getNearbyPoints(ctx context.Context, lat, lon float64) []geoindex.Point {
-	//Tracer code for endpoint
-	tracer := otel.GetTracerProvider().Tracer("")
-	_, span := tracer.Start(ctx, "GeoHandler")
-	defer span.End()
 
 	log.Trace().Msgf("In geo getNearbyPoints, lat = %f, lon = %f", lat, lon)
 
