@@ -124,13 +124,13 @@ jaeger:
     repository: jaegertracing/all-in-one
     tag: "1.21.0"
   # put jaeger into master node
-  affinity:
-    nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-          - matchExpressions:
-            - key: node-role.kubernetes.io/master
-              operator: Exists
+  # affinity:
+  #   nodeAffinity:
+  #     requiredDuringSchedulingIgnoredDuringExecution:
+  #       nodeSelectorTerms:
+  #         - matchExpressions:
+  #           - key: node-role.kubernetes.io/master
+  #             operator: Exists
   tolerations:
     - key: node-role.kubernetes.io/master
       operator: Exists
