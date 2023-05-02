@@ -71,9 +71,7 @@ autoscaling:
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
 
-nodeSelector: {
-      nodePool: cluster 
-}
+nodeSelector: {}
 
 tolerations: []
 
@@ -94,7 +92,7 @@ features:
   #  - TLS_XXX: Enabled, using the specified Cipher suite, see tls/options.go#L22
   tls: 0
   # Ratio of request will be traced by Jaeger
-  jaegerSampleRatio: "0.0"
+  jaegerSampleRatio: "0.1"
   # golang GCPercent value
   gcPercent: 100
   # memcached client timeout value in seconds
