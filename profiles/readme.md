@@ -3,3 +3,10 @@ To transform the pprof data to csv file, inport into a sqlite db for queries, an
 ```
 ./process_folder.sh raw_data
 ```
+
+
+To simply regenerate a particular graph, run the generate_bar_graph.py script with a csv file as input. eg.
+
+```
+python3 generate_bar_graph.py csv_data/profile.csv 
+```
