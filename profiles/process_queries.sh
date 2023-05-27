@@ -1,30 +1,35 @@
 #!/bin/bash
 
+set -eEuo pipefail
 
 TABLE_NAME=$1
-echo "Running queries for table";
+INCLUDE_TOTALS="false"
+# echo "Running queries for table";
 
-echo $TABLE_NAME;
+# echo $TABLE_NAME;
+if [[ $INCLUDE_TOTALS == "true" ]]; then
 
-echo -n "Total Samples,"
+echo -n "Total Samples,";
 sqlite3 profiles.db "Select SUM(\"Count\") from ${TABLE_NAME};";
 
-#sqlite3 profiles.db 'select * from geo where CallStack LIKE '%syscall%';
-echo -n "Total gRPC,"
+echo -n "Total gRPC,";
 sqlite3 profiles.db "Select SUM(\"Count\") from ${TABLE_NAME} where CallStack LIKE '%grpc%';";
+fi
+
 
 echo -n "gRPC Syscall,";
 #sqlite3 profiles.db "CREATE VIEW all_syscall AS SELECT * from ${TABLE_NAME} WHERE CallStack LIKE '%syscall%';";
 sqlite3 profiles.db "select SUM(\"Count\") from ${TABLE_NAME} WHERE CallStack LIKE '%syscall%' AND CallStack NOT LIKE '%${TABLE_NAME}.(%';";
 
-#select SUM(\"Count\") from merged WHERE CallStack LIKE '%syscall%' AND CallStack NOT LIKE '%processUnaryRPC%';
 
 echo -n "Business Call,";
+if [[ $TABLE_NAME == "merged" ]]; then 
+sqlite3 profiles.db "Select SUM(\"Count\") from ${TABLE_NAME} where CallStack LIKE '%\_Handler%' ESCAPE '\';";
+else
 sqlite3 profiles.db "Select SUM(\"Count\") from ${TABLE_NAME} where CallStack LIKE '%${TABLE_NAME}.(%';";
-
+fi
 
 #Select SUM("Count") from merged where CallStack LIKE '%proto%'AND CallStack NOT LIKE '%client%';
-
 
 echo -n "Data Transform,";
 sqlite3 profiles.db "Select SUM(\"Count\") from ${TABLE_NAME} where CallStack LIKE '%Unmarshal%' OR CallStack Like '%Marshal%' OR CallStack Like '%Decoder%' OR CallStack Like '%Encoder%';";
