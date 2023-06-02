@@ -29,12 +29,12 @@ rm "$INPUT_FILE" $TABLE_NAME.out $TABLE_NAME.csv
 ./process_queries.sh $TABLE_NAME > $TABLE_NAME.csv
 
 #GENERATE BAR GRAPH
-python3 generate_bar_graph.py $TABLE_NAME.csv
+#python3 generate_bar_graph.py $TABLE_NAME.csv
 
 #MOVE CSV OUTPUT FILES TO CHOSEN DIRECTORY
 mv $TABLE_NAME.csv $CSV_DIR
 
-mv $TABLE_NAME.svg $GRAPH_DIR
+#mv $TABLE_NAME.svg $GRAPH_DIR
 
 
 

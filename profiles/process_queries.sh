@@ -3,7 +3,7 @@
 set -eEuo pipefail
 
 TABLE_NAME=$1
-INCLUDE_TOTALS="false"
+INCLUDE_TOTALS="true"
 # echo "Running queries for table";
 
 # echo $TABLE_NAME;
@@ -39,4 +39,4 @@ echo -n "Core,";
 sqlite3 profiles.db "Select SUM(\"Count\") from ${TABLE_NAME} where CallStack LIKE '%controlBuffer%' OR CallStack LIKE '%loopyWriter%' AND CallStack NOT LIKE '%syscall%';"
 
 echo -n "Transport,";
-sqlite3 profiles.db "Select SUM(\"Count\") from ${TABLE_NAME} where CallStack LIKE '%http2Server).Write%' OR CallStack LIKE '%http2Server).WriteStatus%' OR CallStack LIKE '%Stream).Read%' OR (CallStack LIKE '%HandleStreams%' AND CallStack NOT LIKE '%syscall%');"
+sqlite3 profiles.db "Select SUM(\"Count\") from ${TABLE_NAME} where CallStack LIKE '%http2Server).Write%' OR CallStack LIKE '%http2Server).WriteStatus%' OR CallStack LIKE '%Stream).Read%' OR (CallStack LIKE '%HandleStreams%' AND CallStack NOT LIKE '%syscall%' AND CallStack NOT LIKE '%Decoder%');"

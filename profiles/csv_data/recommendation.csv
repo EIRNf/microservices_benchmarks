@@ -1,5 +1,7 @@
+Total Samples,12075
+Total gRPC,9175
 gRPC Syscall,2804
 Business Call,729
 Data Transform,903
 Core,874
-Transport,3211
+Transport,2651
