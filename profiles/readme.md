@@ -17,4 +17,4 @@ python3 generate_bar_graph.py csv_data/profile.csv
 ## Issues
 
 - The frontend and search services are not accurately analysed. 
-    - As they function as GRPC clients and servers it is possible that the server queries capture Client functions as well rending analysis innacurate.
+    - As they function as GRPC clients and servers it is possible that the sql queries capture Client functions as well as Server functions rendering analysis innacurate.
