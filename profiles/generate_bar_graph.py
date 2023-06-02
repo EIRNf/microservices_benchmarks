@@ -24,12 +24,22 @@ with open(os.path.join(__location__,csv_file), 'r') as file:
     for row in reader:
         data.append(row)
 
-# Separate labels and values
-labels = [row[0] for row in data]
-values = [int(row[1]) for row in data]
+labels = []
+values = []
 
+# Separate labels and values
+for row in data:
+    if (row[0] == name):
+        continue
+    if (row[0] == "Total Samples"):
+        continue
+    if (row[0] == "Total gRPC"):
+        continue
+    labels.append(row[0])
+    values.append(int(float(row[1]))) 
 
 # Calculate the total sum of values
+# for 
 total = sum(values)
 
 # Calculate the percentage values

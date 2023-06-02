@@ -6,7 +6,7 @@ TABLE_NAME=$1
 INCLUDE_TOTALS="true"
 # echo "Running queries for table";
 
-# echo $TABLE_NAME;
+echo $TABLE_NAME;
 if [[ $INCLUDE_TOTALS == "true" ]]; then
 
 echo -n "Total Samples,";
