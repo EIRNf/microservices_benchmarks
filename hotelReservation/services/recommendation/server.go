@@ -27,7 +27,7 @@ import (
 
 	// "strings"
 
-	pyroscope "github.com/pyroscope-io/client/pyroscope"
+	"github.com/grafana/pyroscope-go"
 )
 
 const name = "srv-recommendation"
