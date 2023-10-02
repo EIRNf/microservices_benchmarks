@@ -7,7 +7,9 @@ import (
 	"github.com/grpc-ecosystem/grpc-opentracing/go/otgrpc"
 	"github.com/harlow/go-micro-services/tls"
 	consul "github.com/hashicorp/consul/api"
-	lb "github.com/olivere/grpc/lb/consul"
+
+	// lb "github.com/olivere/grpc/lb/consul"
+	lb "github.com/EIRNf/grpc_lb/lb/consul"
 	opentracing "github.com/opentracing/opentracing-go"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"
