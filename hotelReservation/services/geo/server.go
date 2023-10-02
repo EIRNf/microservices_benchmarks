@@ -1,6 +1,8 @@
 package geo
 
 import (
+	"github.com/fullstorydev/grpchan"
+
 	// "encoding/json"
 	"fmt"
 
@@ -24,7 +26,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"
 
-	pyroscope "github.com/pyroscope-io/client/pyroscope"
+	"github.com/grafana/pyroscope-go"
 )
 
 const (
@@ -115,7 +117,8 @@ func (s *Server) Run() error {
 		opts = append(opts, tlsopt)
 	}
 
-	srv := grpc.NewServer(opts...)
+	// srv := grpc.NewServer(opts...)
+	srv := grpchan.NewServer(opts...)
 
 	pb.RegisterGeoServer(srv, s)
 

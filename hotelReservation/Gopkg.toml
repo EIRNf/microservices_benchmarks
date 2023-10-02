@@ -53,6 +53,9 @@
   name = "google.golang.org/grpc"
   version = "1.10.0"
 
+[[constraint]]
+  name = "github.com/fullstorydev/grpchan"
+
 [prune]
   go-tests = true
   unused-packages = true
