@@ -1,6 +1,7 @@
 package geo
 
 import (
+	"github.com/fullstorydev/grpchan"
 	"github.com/fullstorydev/grpchan/shmgrpc"
 
 	// "encoding/json"
@@ -117,6 +118,7 @@ func (s *Server) Run() error {
 		opts = append(opts, tlsopt)
 	}
 
+	shmgrpc.NewServer()
 	// srv := grpc.NewServer(opts...)
 	srv := grpchan.NewServer(opts...)
 
