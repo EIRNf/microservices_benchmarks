@@ -1,7 +1,6 @@
 package geo
 
 import (
-	"github.com/fullstorydev/grpchan"
 	"github.com/fullstorydev/grpchan/shmgrpc"
 
 	// "encoding/json"
@@ -118,9 +117,8 @@ func (s *Server) Run() error {
 		opts = append(opts, tlsopt)
 	}
 
-	shmgrpc.NewServer()
 	// srv := grpc.NewServer(opts...)
-	srv := grpchan.NewServer(opts...)
+	srv := shmgrpc.NewServer(name)
 
 	pb.RegisterGeoServer(srv, s)
 
@@ -145,7 +143,7 @@ func (s *Server) Run() error {
 
 	// fmt.Printf("geo server ip = %s, port = %d\n", s.IpAddr, s.Port)
 
-	err = s.Registry.Register(name, s.uuid, s.IpAddr, s.Port)
+	err = s.Registry.Registerz(name, s.uuid, s.IpAddr, s.Port)
 	if err != nil {
 		return fmt.Errorf("failed register: %v", err)
 	}
