@@ -1,4 +1,4 @@
-FROM golang:1.19
+FROM golang:1.20
 
 # Custom cache invalidation
 ARG CACHEBUST=1
@@ -6,7 +6,7 @@ ARG CACHEBUST=1
 RUN git config --global http.sslverify false
 COPY . /go/src/github.com/harlow/go-micro-services
 WORKDIR /go/src/github.com/harlow/go-micro-services
-RUN go mod init
+# RUN go mod init
 RUN go get gopkg.in/mgo.v2
 RUN go get github.com/bradfitz/gomemcache/memcache
 RUN go get github.com/google/uuid
@@ -25,5 +25,5 @@ RUN go get -u github.com/EIRNf/grpc_lb@v0.0.2
 RUN go mod vendor
 # # use local modified github.com/hailocab/go-geoindex instead of upstream one
 COPY ./vendor/github.com/hailocab/go-geoindex /go/src/github.com/harlow/go-micro-services/vendor/github.com/hailocab/go-geoindex 
-COPY ./vendor/github.com/fullstorydev /go/src/github.com/fullstorydev/grpchan
+COPY ./vendor/github.com/fullstorydev/grpchan /go/src/github.com/fullstorydev/grpchan
 RUN go install -ldflags="-s -w" ./cmd/...

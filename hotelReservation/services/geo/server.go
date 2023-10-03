@@ -1,7 +1,7 @@
 package geo
 
 import (
-	"github.com/fullstorydev/grpchan"
+	"github.com/fullstorydev/grpchan/shmgrpc"
 
 	// "encoding/json"
 	"fmt"
