@@ -3,12 +3,9 @@ package search
 import (
 	// "encoding/json"
 	"fmt"
-	"net/url"
-
 	// F"io/ioutil"
 	"net"
 
-	"github.com/fullstorydev/grpchan/shmgrpc"
 	"github.com/rs/zerolog/log"
 
 	"os"
@@ -37,7 +34,6 @@ const name = "srv-search"
 // Server implments the search service
 type Server struct {
 	geoClient  geo.GeoClient
-	cc         shmgrpc.Channel
 	rateClient rate.RateClient
 
 	Tracer     opentracing.Tracer
@@ -111,7 +107,7 @@ func (s *Server) Run() error {
 	pb.RegisterSearchServer(srv, s)
 
 	// init grpc clients
-	if err := s.initGeoClientShm("srv-geo"); err != nil {
+	if err := s.initGeoClient("srv-geo"); err != nil {
 		return err
 	}
 	if err := s.initRateClient("srv-rate"); err != nil {
@@ -148,34 +144,14 @@ func (s *Server) Run() error {
 // Shutdown cleans up any processes
 func (s *Server) Shutdown() {
 	s.Registry.Deregister(s.uuid)
-
-	defer shmgrpc.StopPollingQueue(shmgrpc.GetQueue(s.cc.ShmQueueInfo.RequestShmaddr))
-	defer shmgrpc.StopPollingQueue(shmgrpc.GetQueue(s.cc.ShmQueueInfo.ResponseShmaddr))
-
-	defer shmgrpc.Detach(s.cc.ShmQueueInfo.RequestShmaddr)
-	defer shmgrpc.Detach(s.cc.ShmQueueInfo.ResponseShmaddr)
 }
 
-// func (s *Server) initGeoClient(name string) error {
-// 	conn, err := s.getGprcConn(name)
-// 	if err != nil {
-// 		return fmt.Errorf("dialer error: %v", err)
-// 	}
-// 	s.geoClient = geo.NewGeoClient(conn)
-// 	return nil
-// }
-
-func (s *Server) initGeoClientShm(name string) error {
-
-	// Construct Channel with necessary parameters to talk to the Server
-	cc := shmgrpc.NewChannel(&url.URL{}, "name")
-
-	s.cc = *cc
-
-	s.geoClient = geo.NewGeoClient(cc)
-
-	// grpchantesting.RunChannelTestCases(t, &cc, true)
-	// geo.RunChannelBenchmarkCases(b, cc, false)
+func (s *Server) initGeoClient(name string) error {
+	conn, err := s.getGprcConn(name)
+	if err != nil {
+		return fmt.Errorf("dialer error: %v", err)
+	}
+	s.geoClient = geo.NewGeoClient(conn)
 	return nil
 }
 

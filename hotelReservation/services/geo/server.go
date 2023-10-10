@@ -1,6 +1,8 @@
 package geo
 
 import (
+	"net"
+
 	"github.com/fullstorydev/grpchan/shmgrpc"
 
 	// "encoding/json"
@@ -119,19 +121,19 @@ func (s *Server) Run() error {
 		opts = append(opts, tlsopt)
 	}
 
-	// srv := grpc.NewServer(opts...)
-	srv := shmgrpc.NewServer(name)
+	srv := grpc.NewServer(opts...)
+	// srv := shmgrpc.NewServer(name)
 
-	s.shmserver = srv
+	// s.shmserver = srv
 
-	svc := &pb.UnimplementedGeoServer{}
-	pb.RegisterGeoServer(srv, svc)
+	// svc := &pb.UnimplementedGeoServer{}
+	pb.RegisterGeoServer(srv, s)
 
-	// // listener
-	// lis, err := net.Listen("tcp", fmt.Sprintf(":%d", s.Port))
-	// if err != nil {
-	// 	return fmt.Errorf("failed to listen: %v", err)
-	// }
+	// listener
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", s.Port))
+	if err != nil {
+		return fmt.Errorf("failed to listen: %v", err)
+	}
 
 	// register the service
 	// jsonFile, err := os.Open("config.json")
@@ -149,15 +151,15 @@ func (s *Server) Run() error {
 	// fmt.Printf("geo server ip = %s, port = %d\n", s.IpAddr, s.Port)
 
 	// go pb.RegisterGeoServer()
-	// err = s.Registry.Registerz(name, s.uuid, s.IpAddr, s.Port)
+	err = s.Registry.Register(name, s.uuid, s.IpAddr, s.Port)
 	if err != nil {
 		return fmt.Errorf("failed register: %v", err)
 	}
 	log.Info().Msg("Successfully registered in consul")
 
-	srv.HandleMethods(svc)
+	// srv.HandleMethods(svc)
 
-	return nil
+	return srv.Serve(lis)
 }
 
 // Shutdown cleans up any processes
