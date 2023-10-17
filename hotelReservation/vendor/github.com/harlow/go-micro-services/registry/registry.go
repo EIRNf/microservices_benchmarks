@@ -19,12 +19,14 @@ func NewClient(addr string) (*Client, error) {
 		return nil, err
 	}
 
-	return &Client{c}, nil
+	return &Client{c, *cfg}, nil
 }
 
 // Client provides an interface for communicating with registry
 type Client struct {
 	*consul.Client
+
+	Config consul.Config
 }
 
 // Look for the network device being dedicated for gRPC traffic.
