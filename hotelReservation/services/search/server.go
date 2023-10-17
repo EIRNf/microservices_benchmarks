@@ -6,6 +6,8 @@ import (
 
 	"github.com/harlow/go-micro-services/dialer"
 
+	"github.com/harlow/go-micro-services/dialer"
+
 	// F"io/ioutil"
 	"net"
 
