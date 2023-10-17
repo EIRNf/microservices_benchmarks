@@ -168,7 +168,7 @@ func (s *Server) Shutdown() {
 func (s *Server) initGeoClientShm(name string) error {
 
 	// Construct Channel with necessary parameters to talk to the Server
-	cc := shmgrpc.NewChannel(&url.URL{}, "name")
+	cc := shmgrpc.NewChannel(&url.URL{}, name)
 
 	s.cc = *cc
 
