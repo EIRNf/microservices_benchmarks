@@ -11,10 +11,12 @@ RUN go get gopkg.in/mgo.v2
 RUN go get github.com/bradfitz/gomemcache/memcache
 RUN go get github.com/google/uuid
 RUN go get github.com/grafana/pyroscope-go
-RUN go get -u github.com/EIRNf/grpc_lb@v0.0.2
+# RUN go get -u github.com/EIRNf/grpc_lb@v0.0.2
+# RUN go get github.com/mbobakov/grpc-consul-resolver
+# RUN go get github.com/opentracing-contrib/go-grpc
 # RUN go get github.com/EIRNf/grpc_lb/lb/consul
 # RUN go get github.com/harlow/go-micro-services/dialer
-# RUN go mod tidy
+RUN go mod tidy
 # COPY ./vendor/github.com/olivere/grpc /go/src/github.com/olivere/grpc
 # RUN go get google.golang.org/grpc/naming@v1.29.0
 

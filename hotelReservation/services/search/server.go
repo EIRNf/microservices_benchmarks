@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"net/url"
 
+	"github.com/harlow/go-micro-services/dialer"
+
 	// F"io/ioutil"
 	"net"
 
@@ -24,9 +26,7 @@ import (
 	opentracing "github.com/opentracing/opentracing-go"
 	context "golang.org/x/net/context"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/resolver"
 
-	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/keepalive"
 
 	"github.com/grafana/pyroscope-go"
@@ -191,12 +191,18 @@ func (s *Server) initRateClient(name string) error {
 func (s *Server) getGprcConn(name string) (*grpc.ClientConn, error) {
 
 	// Make another ClientConn with round_robin policy.
-	return grpc.Dial(
-		fmt.Sprintf("%s:///%s", resolver.GetDefaultScheme(), name),
-		grpc.WithDefaultServiceConfig(`{"loadBalancingConfig": [{"round_robin":{}}]}`), // This sets the initial balancing policy.
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
-	)
+	// return grpc.Dial(
+	// 	fmt.Sprintf("%s:///%s", resolver.GetDefaultScheme(), name),
+	// 	grpc.WithDefaultServiceConfig(`{"loadBalancingConfig": [{"round_robin":{}}]}`), // This sets the initial balancing policy.
+	// 	grpc.WithTransportCredentials(insecure.NewCredentials()),
+	// )
 
+	//Use dialer to minimize code reuse
+	return dialer.Dial(
+		name,
+		s.Registry,
+		s.Tracer,
+	)
 	// if s.KnativeDns != "" {
 	// 	return dialer.Dial(
 	// 		fmt.Sprintf("%s.%s", name, s.KnativeDns),
