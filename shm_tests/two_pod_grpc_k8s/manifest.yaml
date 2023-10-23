@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: client
+spec:
+  hostIPC: true
+  containers:
+  - name: client
+    image: eirn/ipc_grpc
+    command: ["/go/src/two_pod_grpc_k8s/main.test"]
+    args: ["-test.bench=.","-test.benchtime=30s"]  
+  restartPolicy: Always
+  hostIPC: true
+--- 
+apiVersion: v1
+kind: Pod
+metadata:
+  name: server
+spec:
+  hostIPC: true
+  containers:
+  - name: server
+    image: eirn/ipc_grpc
+    command: ["/go/src/two_pod_grpc_k8s/main"]
+  restartPolicy: Always
+  hostIPC: true

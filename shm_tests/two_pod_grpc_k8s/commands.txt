@@ -1,0 +1,4 @@
+docker build --push -t eirn/ipc_grpc:latest .
+kubectl create -f manifest.yaml
+kubectl logs client
+kubectl logs server
