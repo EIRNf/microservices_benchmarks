@@ -138,12 +138,24 @@ frontend:
   service:
     type: NodePort
 
-# geo:
+geo:
+  spec:
+    hostIPC: true
+    template:
+      spec:
+        hostIPC: true
+
 #profile:
 #rate:
 #recommendation:
 #reservation:
-#search:
+search:
+  spec:
+    hostIPC: true
+    template:
+      spec:
+        hostIPC: true
+
 # user:
 
 memcached-profile:

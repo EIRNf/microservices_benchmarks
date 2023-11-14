@@ -117,6 +117,7 @@ spec:
         app-name: geo
     spec:
       {{- if .Values.evenly_distributed }}
+      hostIPC: true
       topologySpreadConstraints:
         - maxSkew: 1
           topologyKey: kubernetes.io/hostname
@@ -207,4 +208,3 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      hostIPC: true
