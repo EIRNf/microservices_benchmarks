@@ -127,7 +127,9 @@ func (s *Server) Run() error {
 	// s.shmserver = srv
 
 	// svc := &pb.UnimplementedGeoServer{}
-	pb.RegisterGeoServer(srv, s)
+	svc := &GeoServer{}
+	// svc := &pb.GeoServer{}
+	go pb.RegisterGeoServer(srv, svc)
 
 	// listener
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", s.Port))
@@ -159,13 +161,19 @@ func (s *Server) Run() error {
 
 	// srv.HandleMethods(svc)
 
-	return srv.Serve(lis)
+	defer srv.Stop()
+
+	return nil
 }
 
 // Shutdown cleans up any processes
 func (s *Server) Shutdown() {
 	s.Registry.Deregister(s.uuid)
 	s.shmserver.Stop()
+}
+
+type GeoServer struct {
+	pb.UnimplementedGeoServer
 }
 
 // Nearby returns all hotels within a given distance.
