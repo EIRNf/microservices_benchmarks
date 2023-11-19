@@ -29,7 +29,7 @@ import (
 
 	"github.com/bradfitz/gomemcache/memcache"
 
-	pyroscope "github.com/pyroscope-io/client/pyroscope"
+	pyroscope "github.com/grafana/pyroscope-go"
 )
 
 const name = "srv-rate"
