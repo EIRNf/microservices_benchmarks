@@ -1,0 +1,3 @@
+[submodule "shm_tests/two_pod_grpc_k8s/grpchan"]
+	path = shm_tests/two_pod_grpc_k8s/grpchan
+	url = https://github.com/EIRNf/grpchan.git
