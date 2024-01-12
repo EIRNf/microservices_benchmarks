@@ -3,10 +3,7 @@ package search
 import (
 	// "encoding/json"
 	"fmt"
-
-	"github.com/harlow/go-micro-services/dialer"
-
-	"github.com/harlow/go-micro-services/dialer"
+	"net/url"
 
 	"github.com/harlow/go-micro-services/dialer"
 

@@ -163,8 +163,6 @@ func (s *Server) Run() error {
 
 	defer srv.Stop()
 
-	defer srv.Stop()
-
 	return nil
 }
 
