@@ -27,7 +27,7 @@ import (
 	"github.com/bradfitz/gomemcache/memcache"
 	// "strings"
 
-	"github.com/grafana/pyroscope-go"
+	pyroscope "github.com/grafana/pyroscope-go"
 )
 
 const name = "srv-profile"
