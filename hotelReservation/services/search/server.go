@@ -3,8 +3,8 @@ package search
 import (
 	// "encoding/json"
 	"fmt"
-	"net/url"
 
+	"github.com/fullstorydev/grpchan/shmgrpc"
 	"github.com/harlow/go-micro-services/dialer"
 
 	// F"io/ioutil"
@@ -109,7 +109,7 @@ func (s *Server) Run() error {
 	pb.RegisterSearchServer(srv, s)
 
 	// init grpc clients
-	if err := s.initGeoClient("srv-geo"); err != nil {
+	if err := s.initGeoClientShm("srv-geo"); err != nil {
 		return err
 	}
 	if err := s.initRateClient("srv-rate"); err != nil {
@@ -160,9 +160,10 @@ func (s *Server) Shutdown() {
 func (s *Server) initGeoClientShm(name string) error {
 
 	// Construct Channel with necessary parameters to talk to the Server
-	cc := shmgrpc.NewChannel(&url.URL{}, name)
+	cc := shmgrpc.NewChannel("localhost", name)
+	time.Sleep(5 * time.Second)
 
-	s.cc = *cc
+	// s.cc = *cc
 
 	s.geoClient = geo.NewGeoClient(cc)
 

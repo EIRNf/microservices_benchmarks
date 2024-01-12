@@ -1,8 +1,6 @@
 package geo
 
 import (
-	"net"
-
 	"github.com/fullstorydev/grpchan/shmgrpc"
 
 	// "encoding/json"
@@ -121,21 +119,17 @@ func (s *Server) Run() error {
 		opts = append(opts, tlsopt)
 	}
 
-	srv := grpc.NewServer(opts...)
-	// srv := shmgrpc.NewServer(name)
-
-	// s.shmserver = srv
-
-	// svc := &pb.UnimplementedGeoServer{}
 	svc := &GeoServer{}
-	// svc := &pb.GeoServer{}
+	srv := shmgrpc.NewServer("srv-geo")
 	go pb.RegisterGeoServer(srv, svc)
 
 	// listener
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", s.Port))
-	if err != nil {
-		return fmt.Errorf("failed to listen: %v", err)
-	}
+	// lis, err := net.Listen("tcp", fmt.Sprintf(":%d", s.Port))
+	// if err != nil {
+	// 	return fmt.Errorf("failed to listen: %v", err)
+	// }
+	lis := shmgrpc.Listen("srv-geo")
+	go srv.Serve(lis)
 
 	// register the service
 	// jsonFile, err := os.Open("config.json")
