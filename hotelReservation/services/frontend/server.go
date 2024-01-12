@@ -15,6 +15,7 @@ import (
 
 	"github.com/harlow/go-micro-services/dialer"
 	"github.com/harlow/go-micro-services/registry"
+
 	profile "github.com/harlow/go-micro-services/services/profile/proto"
 	search "github.com/harlow/go-micro-services/services/search/proto"
 	"github.com/harlow/go-micro-services/tls"
@@ -83,18 +84,22 @@ func (s *Server) Run() error {
 
 	log.Info().Msg("Initializing gRPC clients...")
 	if err := s.initSearchClient("srv-search"); err != nil {
+		log.Err(err)
 		return err
 	}
 
 	if err := s.initProfileClient("srv-profile"); err != nil {
+		log.Err(err)
 		return err
 	}
 
 	if err := s.initRecommendationClient("srv-recommendation"); err != nil {
+		log.Err(err)
 		return err
 	}
 
 	if err := s.initUserClient("srv-user"); err != nil {
+		log.Err(err)
 		return err
 	}
 
@@ -174,20 +179,14 @@ func (s *Server) initReservation(name string) error {
 }
 
 func (s *Server) getGprcConn(name string) (*grpc.ClientConn, error) {
-	log.Info().Msg("get Grpc conn is :")
-	log.Info().Msg(s.KnativeDns)
-	log.Info().Msg(fmt.Sprintf("%s.%s", name, s.KnativeDns))
-	if s.KnativeDns != "" {
-		return dialer.Dial(
-			fmt.Sprintf("%s.%s", name, s.KnativeDns),
-			dialer.WithTracer(s.Tracer))
-	} else {
-		return dialer.Dial(
-			name,
-			dialer.WithTracer(s.Tracer),
-			dialer.WithBalancer(s.Registry.Client),
-		)
-	}
+	log.Info().Msgf("Consul Registry [host: %v]...", *s.Registry)
+
+	//Use dialer to minimize code reuse
+	return dialer.Dial(
+		name,
+		s.Registry,
+		s.Tracer,
+	)
 }
 
 func (s *Server) searchHandler(w http.ResponseWriter, r *http.Request) {

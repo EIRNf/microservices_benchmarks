@@ -1,6 +1,10 @@
 package geo
 
 import (
+	"net"
+
+	"github.com/fullstorydev/grpchan/shmgrpc"
+
 	// "encoding/json"
 	"fmt"
 
@@ -8,7 +12,7 @@ import (
 	"gopkg.in/mgo.v2/bson"
 
 	// "io/ioutil"
-	"net"
+
 	"os"
 	"time"
 
@@ -43,6 +47,8 @@ type Server struct {
 	Port         int
 	IpAddr       string
 	MongoSession *mgo.Session
+
+	shmserver *shmgrpc.Server
 }
 
 // Run starts the server
@@ -116,7 +122,11 @@ func (s *Server) Run() error {
 	}
 
 	srv := grpc.NewServer(opts...)
+	// srv := shmgrpc.NewServer(name)
 
+	// s.shmserver = srv
+
+	// svc := &pb.UnimplementedGeoServer{}
 	pb.RegisterGeoServer(srv, s)
 
 	// listener
@@ -140,11 +150,14 @@ func (s *Server) Run() error {
 
 	// fmt.Printf("geo server ip = %s, port = %d\n", s.IpAddr, s.Port)
 
+	// go pb.RegisterGeoServer()
 	err = s.Registry.Register(name, s.uuid, s.IpAddr, s.Port)
 	if err != nil {
 		return fmt.Errorf("failed register: %v", err)
 	}
 	log.Info().Msg("Successfully registered in consul")
+
+	// srv.HandleMethods(svc)
 
 	return srv.Serve(lis)
 }
@@ -152,6 +165,7 @@ func (s *Server) Run() error {
 // Shutdown cleans up any processes
 func (s *Server) Shutdown() {
 	s.Registry.Deregister(s.uuid)
+	s.shmserver.Stop()
 }
 
 // Nearby returns all hotels within a given distance.

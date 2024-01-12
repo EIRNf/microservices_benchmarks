@@ -139,13 +139,13 @@ frontend:
   service:
     type: NodePort
 
-#geo:
+# geo:
 #profile:
 #rate:
 #recommendation:
 #reservation:
 #search:
-#user
+# user:
 
 memcached-profile:
   replicaCount: 1
