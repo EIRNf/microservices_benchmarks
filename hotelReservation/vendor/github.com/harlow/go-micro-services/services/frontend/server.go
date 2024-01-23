@@ -24,7 +24,7 @@ import (
 
 	"os"
 
-	"github.com/grafana/pyroscope-go"
+	pyroscope "github.com/grafana/pyroscope-go"
 )
 
 // Server implements frontend service

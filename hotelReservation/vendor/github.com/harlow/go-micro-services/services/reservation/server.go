@@ -24,7 +24,7 @@ import (
 	"github.com/bradfitz/gomemcache/memcache"
 	"github.com/rs/zerolog/log"
 
-	"github.com/grafana/pyroscope-go"
+	pyroscope "github.com/grafana/pyroscope-go"
 
 	// "strings"
 	"strconv"

@@ -20,6 +20,10 @@ github.com/BurntSushi/toml/internal
 # github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24
 ## explicit; go 1.13
 github.com/Djarvur/go-err113
+# github.com/EIRNf/notnets_grpc v0.0.0-20240123004248-999378e9f6c4
+## explicit; go 1.20
+github.com/EIRNf/notnets_grpc
+github.com/EIRNf/notnets_grpc/internal
 # github.com/GaijinEntertainment/go-exhaustruct/v2 v2.3.0
 ## explicit; go 1.19
 github.com/GaijinEntertainment/go-exhaustruct/v2/pkg/analyzer
@@ -68,6 +72,8 @@ github.com/breml/bidichk/pkg/bidichk
 # github.com/breml/errchkjson v0.3.1
 ## explicit; go 1.17
 github.com/breml/errchkjson
+# github.com/bufbuild/protocompile v0.7.1
+## explicit; go 1.19
 # github.com/butuzov/ireturn v0.1.1
 ## explicit; go 1.15
 github.com/butuzov/ireturn/analyzer
@@ -124,11 +130,9 @@ github.com/firefart/nonamedreturns/analyzer
 # github.com/fsnotify/fsnotify v1.5.4
 ## explicit; go 1.16
 github.com/fsnotify/fsnotify
-# github.com/fullstorydev/grpchan v1.1.1 => ./grpchan
-## explicit; go 1.20
+# github.com/fullstorydev/grpchan v1.1.1
+## explicit; go 1.13
 github.com/fullstorydev/grpchan
-github.com/fullstorydev/grpchan/internal
-github.com/fullstorydev/grpchan/shmgrpc
 # github.com/fzipp/gocyclo v0.6.0
 ## explicit; go 1.18
 github.com/fzipp/gocyclo
@@ -183,14 +187,10 @@ github.com/gofrs/flock
 ## explicit; go 1.9
 github.com/golang/protobuf/jsonpb
 github.com/golang/protobuf/proto
-github.com/golang/protobuf/protoc-gen-go/descriptor
 github.com/golang/protobuf/ptypes
 github.com/golang/protobuf/ptypes/any
 github.com/golang/protobuf/ptypes/duration
-github.com/golang/protobuf/ptypes/empty
-github.com/golang/protobuf/ptypes/struct
 github.com/golang/protobuf/ptypes/timestamp
-github.com/golang/protobuf/ptypes/wrappers
 # github.com/golangci/check v0.0.0-20180506172741-cfe4005ccda2
 ## explicit
 github.com/golangci/check/cmd/structcheck
@@ -255,7 +255,7 @@ github.com/golangci/revgrep
 # github.com/golangci/unconvert v0.0.0-20180507085042-28b1c447d1f4
 ## explicit
 github.com/golangci/unconvert
-# github.com/google/go-cmp v0.5.9
+# github.com/google/go-cmp v0.6.0
 ## explicit; go 1.13
 github.com/google/go-cmp/cmp
 github.com/google/go-cmp/cmp/internal/diff
@@ -370,18 +370,6 @@ github.com/inconshreveable/mousetrap
 # github.com/jgautheron/goconst v1.5.1
 ## explicit; go 1.13
 github.com/jgautheron/goconst
-# github.com/jhump/gopoet v0.1.0
-## explicit
-# github.com/jhump/goprotoc v0.5.0
-## explicit; go 1.15
-# github.com/jhump/protoreflect v1.11.0
-## explicit; go 1.13
-github.com/jhump/protoreflect/codec
-github.com/jhump/protoreflect/desc
-github.com/jhump/protoreflect/desc/internal
-github.com/jhump/protoreflect/dynamic
-github.com/jhump/protoreflect/internal
-github.com/jhump/protoreflect/internal/codec
 # github.com/jingyugao/rowserrcheck v1.1.1
 ## explicit; go 1.13
 github.com/jingyugao/rowserrcheck/passes/rowserr
@@ -799,8 +787,8 @@ golang.org/x/net/http2/hpack
 golang.org/x/net/idna
 golang.org/x/net/internal/timeseries
 golang.org/x/net/trace
-# golang.org/x/sync v0.3.0
-## explicit; go 1.17
+# golang.org/x/sync v0.5.0
+## explicit; go 1.18
 golang.org/x/sync/errgroup
 golang.org/x/sync/semaphore
 # golang.org/x/sys v0.14.0
@@ -892,7 +880,7 @@ golang.org/x/tools/internal/typesinternal
 # google.golang.org/genproto/googleapis/rpc v0.0.0-20231016165738-49dd2c1f3d0b
 ## explicit; go 1.19
 google.golang.org/genproto/googleapis/rpc/status
-# google.golang.org/grpc v1.59.0
+# google.golang.org/grpc v1.60.1
 ## explicit; go 1.19
 google.golang.org/grpc
 google.golang.org/grpc/attributes
@@ -928,6 +916,7 @@ google.golang.org/grpc/internal/metadata
 google.golang.org/grpc/internal/pretty
 google.golang.org/grpc/internal/resolver
 google.golang.org/grpc/internal/resolver/dns
+google.golang.org/grpc/internal/resolver/dns/internal
 google.golang.org/grpc/internal/resolver/passthrough
 google.golang.org/grpc/internal/resolver/unix
 google.golang.org/grpc/internal/serviceconfig
@@ -939,11 +928,12 @@ google.golang.org/grpc/keepalive
 google.golang.org/grpc/metadata
 google.golang.org/grpc/peer
 google.golang.org/grpc/resolver
+google.golang.org/grpc/resolver/dns
 google.golang.org/grpc/serviceconfig
 google.golang.org/grpc/stats
 google.golang.org/grpc/status
 google.golang.org/grpc/tap
-# google.golang.org/protobuf v1.31.0
+# google.golang.org/protobuf v1.31.1-0.20231027082548-f4a6c1f6e5c1
 ## explicit; go 1.11
 google.golang.org/protobuf/encoding/protojson
 google.golang.org/protobuf/encoding/prototext
@@ -976,10 +966,7 @@ google.golang.org/protobuf/runtime/protoimpl
 google.golang.org/protobuf/types/descriptorpb
 google.golang.org/protobuf/types/known/anypb
 google.golang.org/protobuf/types/known/durationpb
-google.golang.org/protobuf/types/known/emptypb
-google.golang.org/protobuf/types/known/structpb
 google.golang.org/protobuf/types/known/timestamppb
-google.golang.org/protobuf/types/known/wrapperspb
 # gopkg.in/ini.v1 v1.67.0
 ## explicit
 gopkg.in/ini.v1
@@ -1026,7 +1013,7 @@ honnef.co/go/tools/staticcheck/fakereflect
 honnef.co/go/tools/staticcheck/fakexml
 honnef.co/go/tools/stylecheck
 honnef.co/go/tools/unused
-# modernc.org/libc v1.35.0
+# modernc.org/libc v1.40.6
 ## explicit; go 1.20
 modernc.org/libc/pthread
 # mvdan.cc/gofumpt v0.4.0
@@ -1044,5 +1031,4 @@ mvdan.cc/lint
 mvdan.cc/unparam/check
 # github.com/harlow/go-micro-services => ./
 # github.com/armon/go-metrics => github.com/hashicorp/go-metrics v0.5.1
-# github.com/fullstorydev/grpchan => ./grpchan
 # github.com/uber-go/atomic => github.com/uber-go/atomic v1.4.0

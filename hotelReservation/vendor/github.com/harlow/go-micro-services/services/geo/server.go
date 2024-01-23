@@ -1,9 +1,7 @@
 package geo
 
 import (
-	"net"
-
-	"github.com/fullstorydev/grpchan/shmgrpc"
+	"github.com/EIRNf/notnets_grpc"
 
 	// "encoding/json"
 	"fmt"
@@ -28,7 +26,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"
 
-	"github.com/grafana/pyroscope-go"
+	pyroscope "github.com/grafana/pyroscope-go"
 )
 
 const (
@@ -48,7 +46,7 @@ type Server struct {
 	IpAddr       string
 	MongoSession *mgo.Session
 
-	shmserver *shmgrpc.Server
+	shmserver *notnets_grpc.NotnetsServer
 }
 
 // Run starts the server
@@ -121,19 +119,16 @@ func (s *Server) Run() error {
 		opts = append(opts, tlsopt)
 	}
 
-	srv := grpc.NewServer(opts...)
-	// srv := shmgrpc.NewServer(name)
-
-	// s.shmserver = srv
-
-	// svc := &pb.UnimplementedGeoServer{}
-	pb.RegisterGeoServer(srv, s)
+	svc := &GeoServer{}
+	srv := notnets_grpc.NewNotnetsServer()
+	go pb.RegisterGeoServer(srv, svc)
 
 	// listener
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", s.Port))
-	if err != nil {
-		return fmt.Errorf("failed to listen: %v", err)
-	}
+	// lis, err := net.Listen("tcp", fmt.Sprintf(":%d", s.Port))
+	// if err != nil {
+	// 	return fmt.Errorf("failed to listen: %v", err)
+	// }
+	lis := notnets_grpc.Listen("srv-geo")
 
 	// register the service
 	// jsonFile, err := os.Open("config.json")
@@ -159,6 +154,7 @@ func (s *Server) Run() error {
 
 	// srv.HandleMethods(svc)
 
+	// defer srv.Stop()
 	return srv.Serve(lis)
 }
 
@@ -166,6 +162,10 @@ func (s *Server) Run() error {
 func (s *Server) Shutdown() {
 	s.Registry.Deregister(s.uuid)
 	s.shmserver.Stop()
+}
+
+type GeoServer struct {
+	pb.UnimplementedGeoServer
 }
 
 // Nearby returns all hotels within a given distance.

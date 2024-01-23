@@ -4,6 +4,7 @@ import (
 	// "encoding/json"
 	"fmt"
 
+	"github.com/EIRNf/notnets_grpc"
 	"github.com/harlow/go-micro-services/dialer"
 
 	// F"io/ioutil"
@@ -27,7 +28,7 @@ import (
 
 	"google.golang.org/grpc/keepalive"
 
-	"github.com/grafana/pyroscope-go"
+	pyroscope "github.com/grafana/pyroscope-go"
 )
 
 const name = "srv-search"
@@ -43,6 +44,10 @@ type Server struct {
 	KnativeDns string
 	Registry   *registry.Client
 	uuid       string
+}
+
+type SearchServer struct {
+	pb.UnimplementedSearchServer
 }
 
 // Run starts the server
@@ -104,11 +109,12 @@ func (s *Server) Run() error {
 		opts = append(opts, tlsopt)
 	}
 
+	svc := &SearchServer{}
 	srv := grpc.NewServer(opts...)
-	pb.RegisterSearchServer(srv, s)
+	pb.RegisterSearchServer(srv, svc)
 
 	// init grpc clients
-	if err := s.initGeoClient("srv-geo"); err != nil {
+	if err := s.initGeoClientShm("srv-geo"); err != nil {
 		return err
 	}
 	if err := s.initRateClient("srv-rate"); err != nil {
@@ -147,12 +153,25 @@ func (s *Server) Shutdown() {
 	s.Registry.Deregister(s.uuid)
 }
 
-func (s *Server) initGeoClient(name string) error {
-	conn, err := s.getGprcConn(name)
+// func (s *Server) initGeoClient(name string) error {
+// 	conn, err := s.getGprcConn(name)
+// 	if err != nil {
+// 		return fmt.Errorf("dialer error: %v", err)
+// 	}
+// 	s.geoClient = geo.NewGeoClient(conn)
+// 	return nil
+// }
+
+func (s *Server) initGeoClientShm(name string) error {
+
+	// Construct Channel with necessary parameters to talk to the Server
+	// cc := shmgrpc.NewChannel(s.IpAddr+":"+fmt.Sprint(s.Port), name)
+	cc, err := notnets_grpc.Dial(s.IpAddr, s.IpAddr+":"+fmt.Sprint(s.Port)+name)
 	if err != nil {
 		return fmt.Errorf("dialer error: %v", err)
 	}
-	s.geoClient = geo.NewGeoClient(conn)
+	time.Sleep(10 * time.Second)
+	s.geoClient = geo.NewGeoClient(cc)
 	return nil
 }
 
