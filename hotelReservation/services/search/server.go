@@ -4,7 +4,7 @@ import (
 	// "encoding/json"
 	"fmt"
 
-	"github.com/fullstorydev/grpchan/shmgrpc"
+	"github.com/EIRNf/notnets_grpc"
 	"github.com/harlow/go-micro-services/dialer"
 
 	// F"io/ioutil"
@@ -165,15 +165,13 @@ func (s *Server) Shutdown() {
 func (s *Server) initGeoClientShm(name string) error {
 
 	// Construct Channel with necessary parameters to talk to the Server
-	cc := shmgrpc.NewChannel(s.IpAddr+":"+fmt.Sprint(s.Port), name)
-	time.Sleep(5 * time.Second)
-
-	// s.cc = *cc
-
+	// cc := shmgrpc.NewChannel(s.IpAddr+":"+fmt.Sprint(s.Port), name)
+	cc, err := notnets_grpc.Dial(s.IpAddr, s.IpAddr+":"+fmt.Sprint(s.Port)+name)
+	if err != nil {
+		return fmt.Errorf("dialer error: %v", err)
+	}
+	time.Sleep(10 * time.Second)
 	s.geoClient = geo.NewGeoClient(cc)
-
-	// grpchantesting.RunChannelTestCases(t, &cc, true)
-	// geo.RunChannelBenchmarkCases(b, cc, false)
 	return nil
 }
 

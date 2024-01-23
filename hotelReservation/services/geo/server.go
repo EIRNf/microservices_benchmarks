@@ -1,7 +1,7 @@
 package geo
 
 import (
-	"github.com/fullstorydev/grpchan/shmgrpc"
+	"github.com/EIRNf/notnets_grpc"
 
 	// "encoding/json"
 	"fmt"
@@ -46,7 +46,7 @@ type Server struct {
 	IpAddr       string
 	MongoSession *mgo.Session
 
-	shmserver *shmgrpc.Server
+	shmserver *notnets_grpc.NotnetsServer
 }
 
 // Run starts the server
@@ -120,7 +120,7 @@ func (s *Server) Run() error {
 	}
 
 	svc := &GeoServer{}
-	srv := shmgrpc.NewServer("srv-geo")
+	srv := notnets_grpc.NewNotnetsServer()
 	go pb.RegisterGeoServer(srv, svc)
 
 	// listener
@@ -128,7 +128,7 @@ func (s *Server) Run() error {
 	// if err != nil {
 	// 	return fmt.Errorf("failed to listen: %v", err)
 	// }
-	lis := shmgrpc.Listen("srv-geo")
+	lis := notnets_grpc.Listen("srv-geo")
 
 	// register the service
 	// jsonFile, err := os.Open("config.json")

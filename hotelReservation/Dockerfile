@@ -28,8 +28,7 @@ RUN go mod tidy
 # RUN echo "replace github.com/EIRNf/grpc_lb/lb/naming => ./vendor/github.com/EIRNf/grpc_lb/lb/naming"
 # COPY ./vendor/github.com/fullstorydev/grpchan /go/src/github.com/fullstorydev/grpchan
 RUN go mod vendor
-
-COPY ./grpchan ./vendor/github.com/fullstorydev/grpchan
+# COPY ./grpchan ./vendor/github.com/fullstorydev/grpchan
 # # use local modified github.com/hailocab/go-geoindex instead of upstream one
 COPY ./vendor/github.com/hailocab/go-geoindex /go/src/github.com/harlow/go-micro-services/vendor/github.com/hailocab/go-geoindex 
 RUN go install -ldflags="-s -w" ./cmd/...
