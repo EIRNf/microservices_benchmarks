@@ -46,6 +46,10 @@ type Server struct {
 	uuid       string
 }
 
+type SearchServer struct {
+	pb.UnimplementedSearchServer
+}
+
 // Run starts the server
 func (s *Server) Run() error {
 
@@ -105,8 +109,9 @@ func (s *Server) Run() error {
 		opts = append(opts, tlsopt)
 	}
 
+	svc := &SearchServer{}
 	srv := grpc.NewServer(opts...)
-	pb.RegisterSearchServer(srv, s)
+	pb.RegisterSearchServer(srv, svc)
 
 	// init grpc clients
 	if err := s.initGeoClientShm("srv-geo"); err != nil {
@@ -160,7 +165,7 @@ func (s *Server) Shutdown() {
 func (s *Server) initGeoClientShm(name string) error {
 
 	// Construct Channel with necessary parameters to talk to the Server
-	cc := shmgrpc.NewChannel("localhost", name)
+	cc := shmgrpc.NewChannel(s.IpAddr+":"+fmt.Sprint(s.Port), name)
 	time.Sleep(5 * time.Second)
 
 	// s.cc = *cc

@@ -1,13 +1,14 @@
 #!/bin/bash
 
 # Set the number of instances you want to run
-num_instances=1
+num_instances=8
 
 run_program() {
     instance_id=$1
     input_param=$2
 
-    go test -bench=. $input_param > output_$instance_id.txt
+# -benchtime=60s
+    go test -test.run=NOP -bench=. $input_param > output_$instance_id.txt
 }
 
 awk_cmd(){
@@ -48,6 +49,7 @@ calculate_values() {
         sum_avg_latency=$(echo print $sum_avg_latency + $AVERAGE_LATENCY | perl)
     done
 
+    echo "Num Instances: $num_instances"
     echo "Total Requests: $total_requests"
     echo "Longest Execution: $longest_execution"
     # echo "Sum Throughput: $sum_throughput"
@@ -65,13 +67,12 @@ rm -f "$prefix"*
 
 start=`date +%s.%N`
 for ((i=1; i<=$num_instances; i++)); do
-    run_program $i "-url=http://192.168.49.2:30052 -endpoint=hotels -reqs=6000" &
+    run_program $i "-url=http://192.168.49.2:32567 -endpoint=hotels -reqs=6000" &
 done
 wait
 end=`date +%s.%N`
 
 runtime=$( echo print $end - $start | perl )
-
 
 
 # Calculate values

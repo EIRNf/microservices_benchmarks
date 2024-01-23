@@ -1,0 +1,3 @@
+# .dockerignore
+# vendor/github.com/fullstorydev/grpchan/**/*
+# vendor/github.com/fullstorydev/grpchan

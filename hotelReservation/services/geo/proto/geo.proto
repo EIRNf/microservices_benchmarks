@@ -2,8 +2,7 @@ syntax = "proto3";
 
 package geo;
 
-//option go_package = ".;geo";
-option go_package = "geo";
+option go_package = "github.com/harlow/go-micro-services/services/geo";
 
 
 service Geo {

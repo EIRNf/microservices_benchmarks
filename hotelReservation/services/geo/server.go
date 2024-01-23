@@ -129,7 +129,6 @@ func (s *Server) Run() error {
 	// 	return fmt.Errorf("failed to listen: %v", err)
 	// }
 	lis := shmgrpc.Listen("srv-geo")
-	go srv.Serve(lis)
 
 	// register the service
 	// jsonFile, err := os.Open("config.json")
@@ -155,9 +154,8 @@ func (s *Server) Run() error {
 
 	// srv.HandleMethods(svc)
 
-	defer srv.Stop()
-
-	return nil
+	// defer srv.Stop()
+	return srv.Serve(lis)
 }
 
 // Shutdown cleans up any processes

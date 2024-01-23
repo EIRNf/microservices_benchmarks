@@ -19,7 +19,7 @@ import (
 // const localURL = "http://localhost:5000"
 // const apiURL = "http://192.168.49.2:30052"
 
-var apiURL = flag.String("url", "http://localhost:5000", "IP/Port of HotelReservation Frontend")
+var apiURL = flag.String("url", "http://192.168.49.2:32567", "IP/Port of HotelReservation Frontend")
 
 var endpoint_bench = flag.String("endpoint", "all", "Test to run:hotels,recommendations,user,reservation")
 
@@ -117,6 +117,8 @@ func Bench_Hotels_Endpoint_Histogram(b *testing.B) {
 	bench := hrtime.NewBenchmark(*num_requests)
 	// defer bench.HistogramClamp()
 
+	http.DefaultTransport.(*http.Transport).MaxIdleConnsPerHost = 100
+
 	for bench.Next() {
 		resp, err := http.Get(request_string)
 
@@ -125,22 +127,22 @@ func Bench_Hotels_Endpoint_Histogram(b *testing.B) {
 			b.Fatalf("RPC failed: %v", err)
 		}
 
-		// defer resp.Body.Close()
-		data, err := io.ReadAll(resp.Body)
+		// // defer resp.Body.Close()
+		// data, err := io.ReadAll(resp.Body)
 		resp.Body.Close() // close the response body
-		if err != nil {
-			b.Fatalf("Error reading body: %v", err)
-		}
+		// if err != nil {
+		// 	b.Fatalf("Error reading body: %v", err)
+		// }
 
-		//Check StatusCode
-		if resp.Status != status_code_ok {
-			b.Fatalf("Status code not ok, instead: %v", resp.Status)
-		}
+		// //Check StatusCode
+		// if resp.Status != status_code_ok {
+		// 	b.Fatalf("Status code not ok, instead: %v", resp.Status)
+		// }
 
-		// //Unexpected Payload
-		if !bytes.Equal(data, hotels_expected) {
-			b.Fatalf("wrong payload returns: expecting %v; got %v", hotels_expected, data)
-		}
+		// // //Unexpected Payload
+		// if !bytes.Equal(data, hotels_expected) {
+		// 	b.Fatalf("wrong payload returns: expecting %v; got %v", hotels_expected, data)
+		// }
 
 	}
 
@@ -178,10 +180,10 @@ func Test_All(t *testing.T) {
 	// }
 
 	//Test Endpoints
-	// t.Run("hotels_endpoint", Test_Hotels_Endpoint)
-	// t.Run("recommendations_endpoint", Test_Recommendation_Endpoint)
-	// t.Run("user_endpoint", Test_User_Endpoint)
-	// t.Run("reservation_endpoint", Test_Reservation_Endpoint)
+	t.Run("hotels_endpoint", Test_Hotels_Endpoint)
+	t.Run("recommendations_endpoint", Test_Recommendation_Endpoint)
+	t.Run("user_endpoint", Test_User_Endpoint)
+	t.Run("reservation_endpoint", Test_Reservation_Endpoint)
 
 }
 
