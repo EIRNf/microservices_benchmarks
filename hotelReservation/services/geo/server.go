@@ -11,7 +11,6 @@ import (
 
 	// "io/ioutil"
 
-	"os"
 	"time"
 
 	"github.com/google/uuid"
@@ -25,8 +24,6 @@ import (
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"
-
-	pyroscope "github.com/grafana/pyroscope-go"
 )
 
 const (
@@ -46,46 +43,13 @@ type Server struct {
 	IpAddr       string
 	MongoSession *mgo.Session
 
+	pb.UnimplementedGeoServer
+
 	shmserver *notnets_grpc.NotnetsServer
 }
 
 // Run starts the server
 func (s *Server) Run() error {
-
-	serverAddress := os.Getenv("PYROSCOPE_SERVER_ADDRESS")
-	applicationName := os.Getenv("PYROSCOPE_APPLICATION_NAME")
-	if serverAddress == "" {
-		serverAddress = "http://pyroscope:4040"
-	}
-	if applicationName == "" {
-		applicationName = "geo.service"
-	}
-
-	_, err := pyroscope.Start(pyroscope.Config{
-		ApplicationName: applicationName,
-		ServerAddress:   serverAddress,
-		Logger:          pyroscope.StandardLogger,
-
-		ProfileTypes: []pyroscope.ProfileType{
-			// these profile types are enabled by default:
-			pyroscope.ProfileCPU,
-			pyroscope.ProfileAllocObjects,
-			pyroscope.ProfileAllocSpace,
-			pyroscope.ProfileInuseObjects,
-			pyroscope.ProfileInuseSpace,
-
-			// these profile types are optional:
-			pyroscope.ProfileGoroutines,
-			pyroscope.ProfileMutexCount,
-			pyroscope.ProfileMutexDuration,
-			pyroscope.ProfileBlockCount,
-			pyroscope.ProfileBlockDuration,
-		},
-	})
-
-	if err != nil {
-		log.Err(err).Str("service", serverAddress)
-	}
 
 	if s.Port == 0 {
 		return fmt.Errorf("server port must be set")
@@ -119,9 +83,13 @@ func (s *Server) Run() error {
 		opts = append(opts, tlsopt)
 	}
 
-	svc := &GeoServer{}
-	srv := notnets_grpc.NewNotnetsServer()
-	go pb.RegisterGeoServer(srv, svc)
+	// svc := &SearchServer{}
+	// srv := grpc.NewServer(opts...)
+	// pb.RegisterSearchServer(srv, s)
+
+	// svc := &GeoServer{}
+	svr := notnets_grpc.NewNotnetsServer()
+	pb.RegisterGeoServer(svr, s)
 
 	// listener
 	// lis, err := net.Listen("tcp", fmt.Sprintf(":%d", s.Port))
@@ -146,16 +114,13 @@ func (s *Server) Run() error {
 	// fmt.Printf("geo server ip = %s, port = %d\n", s.IpAddr, s.Port)
 
 	// go pb.RegisterGeoServer()
-	err = s.Registry.Register(name, s.uuid, s.IpAddr, s.Port)
+	err := s.Registry.Register(name, s.uuid, s.IpAddr, s.Port)
 	if err != nil {
 		return fmt.Errorf("failed register: %v", err)
 	}
 	log.Info().Msg("Successfully registered in consul")
 
-	// srv.HandleMethods(svc)
-
-	// defer srv.Stop()
-	return srv.Serve(lis)
+	return svr.Serve(lis)
 }
 
 // Shutdown cleans up any processes
@@ -164,13 +129,10 @@ func (s *Server) Shutdown() {
 	s.shmserver.Stop()
 }
 
-type GeoServer struct {
-	pb.UnimplementedGeoServer
-}
-
 // Nearby returns all hotels within a given distance.
 func (s *Server) Nearby(ctx context.Context, req *pb.Request) (*pb.Result, error) {
 	log.Trace().Msgf("In geo Nearby")
+	log.Info().Msgf("In geo Nearby")
 
 	var (
 		points = s.getNearbyPoints(ctx, float64(req.Lat), float64(req.Lon))

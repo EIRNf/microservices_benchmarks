@@ -21,10 +21,6 @@ import (
 	"github.com/harlow/go-micro-services/tls"
 	"github.com/harlow/go-micro-services/tracing"
 	"github.com/opentracing/opentracing-go"
-
-	"os"
-
-	pyroscope "github.com/grafana/pyroscope-go"
 )
 
 // Server implements frontend service
@@ -43,40 +39,6 @@ type Server struct {
 
 // Run the server
 func (s *Server) Run() error {
-
-	serverAddress := os.Getenv("PYROSCOPE_SERVER_ADDRESS")
-	applicationName := os.Getenv("PYROSCOPE_APPLICATION_NAME")
-	if serverAddress == "" {
-		serverAddress = "http://pyroscope:4040"
-	}
-	if applicationName == "" {
-		applicationName = "frontend.service"
-	}
-	_, err := pyroscope.Start(pyroscope.Config{
-		ApplicationName: applicationName,
-		ServerAddress:   serverAddress,
-		Logger:          pyroscope.StandardLogger,
-
-		ProfileTypes: []pyroscope.ProfileType{
-			// these profile types are enabled by default:
-			pyroscope.ProfileCPU,
-			pyroscope.ProfileAllocObjects,
-			pyroscope.ProfileAllocSpace,
-			pyroscope.ProfileInuseObjects,
-			pyroscope.ProfileInuseSpace,
-
-			// these profile types are optional:
-			pyroscope.ProfileGoroutines,
-			pyroscope.ProfileMutexCount,
-			pyroscope.ProfileMutexDuration,
-			pyroscope.ProfileBlockCount,
-			pyroscope.ProfileBlockDuration,
-		},
-	})
-
-	if err != nil {
-		log.Err(err).Str("service", serverAddress)
-	}
 
 	if s.Port == 0 {
 		return fmt.Errorf("Server port must be set")

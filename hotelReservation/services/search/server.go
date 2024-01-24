@@ -12,7 +12,6 @@ import (
 
 	"github.com/rs/zerolog/log"
 
-	"os"
 	"time"
 
 	"github.com/google/uuid"
@@ -27,8 +26,6 @@ import (
 	"google.golang.org/grpc"
 
 	"google.golang.org/grpc/keepalive"
-
-	pyroscope "github.com/grafana/pyroscope-go"
 )
 
 const name = "srv-search"
@@ -44,48 +41,12 @@ type Server struct {
 	KnativeDns string
 	Registry   *registry.Client
 	uuid       string
-}
 
-type SearchServer struct {
 	pb.UnimplementedSearchServer
 }
 
 // Run starts the server
 func (s *Server) Run() error {
-
-	serverAddress := os.Getenv("PYROSCOPE_SERVER_ADDRESS")
-	applicationName := os.Getenv("PYROSCOPE_APPLICATION_NAME")
-	if serverAddress == "" {
-		serverAddress = "http://pyroscope:4040"
-	}
-	if applicationName == "" {
-		applicationName = "search.service"
-	}
-	_, err := pyroscope.Start(pyroscope.Config{
-		ApplicationName: applicationName,
-		ServerAddress:   serverAddress,
-		Logger:          pyroscope.StandardLogger,
-
-		ProfileTypes: []pyroscope.ProfileType{
-			// these profile types are enabled by default:
-			pyroscope.ProfileCPU,
-			pyroscope.ProfileAllocObjects,
-			pyroscope.ProfileAllocSpace,
-			pyroscope.ProfileInuseObjects,
-			pyroscope.ProfileInuseSpace,
-
-			// these profile types are optional:
-			pyroscope.ProfileGoroutines,
-			pyroscope.ProfileMutexCount,
-			pyroscope.ProfileMutexDuration,
-			pyroscope.ProfileBlockCount,
-			pyroscope.ProfileBlockDuration,
-		},
-	})
-
-	if err != nil {
-		log.Err(err).Str("service", serverAddress)
-	}
 
 	if s.Port == 0 {
 		return fmt.Errorf("server port must be set")
@@ -109,9 +70,9 @@ func (s *Server) Run() error {
 		opts = append(opts, tlsopt)
 	}
 
-	svc := &SearchServer{}
+	// svc := &SearchServer{}
 	srv := grpc.NewServer(opts...)
-	pb.RegisterSearchServer(srv, svc)
+	pb.RegisterSearchServer(srv, s)
 
 	// init grpc clients
 	if err := s.initGeoClientShm("srv-geo"); err != nil {
@@ -163,10 +124,12 @@ func (s *Server) Shutdown() {
 // }
 
 func (s *Server) initGeoClientShm(name string) error {
-
 	// Construct Channel with necessary parameters to talk to the Server
 	// cc := shmgrpc.NewChannel(s.IpAddr+":"+fmt.Sprint(s.Port), name)
-	cc, err := notnets_grpc.Dial(s.IpAddr, s.IpAddr+":"+fmt.Sprint(s.Port)+name)
+
+	// s.Registry.Config.Address
+	// cc, err := notnets_grpc.Dial(s.IpAddr, s.IpAddr+":"+fmt.Sprint(s.Port)+name)
+	cc, err := notnets_grpc.Dial(s.IpAddr, name)
 	if err != nil {
 		return fmt.Errorf("dialer error: %v", err)
 	}

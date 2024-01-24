@@ -22,12 +22,8 @@ import (
 	"math"
 	"net"
 
-	"os"
 	"time"
-
 	// "strings"
-
-	pyroscope "github.com/grafana/pyroscope-go"
 )
 
 const name = "srv-recommendation"
@@ -45,40 +41,6 @@ type Server struct {
 
 // Run starts the server
 func (s *Server) Run() error {
-
-	serverAddress := os.Getenv("PYROSCOPE_SERVER_ADDRESS")
-	applicationName := os.Getenv("PYROSCOPE_APPLICATION_NAME")
-	if serverAddress == "" {
-		serverAddress = "http://pyroscope:4040"
-	}
-	if applicationName == "" {
-		applicationName = "recommendation.service"
-	}
-	_, err := pyroscope.Start(pyroscope.Config{
-		ApplicationName: applicationName,
-		ServerAddress:   serverAddress,
-		Logger:          pyroscope.StandardLogger,
-
-		ProfileTypes: []pyroscope.ProfileType{
-			// these profile types are enabled by default:
-			pyroscope.ProfileCPU,
-			pyroscope.ProfileAllocObjects,
-			pyroscope.ProfileAllocSpace,
-			pyroscope.ProfileInuseObjects,
-			pyroscope.ProfileInuseSpace,
-
-			// these profile types are optional:
-			pyroscope.ProfileGoroutines,
-			pyroscope.ProfileMutexCount,
-			pyroscope.ProfileMutexDuration,
-			pyroscope.ProfileBlockCount,
-			pyroscope.ProfileBlockDuration,
-		},
-	})
-
-	if err != nil {
-		log.Err(err).Str("service", serverAddress)
-	}
 
 	if s.Port == 0 {
 		return fmt.Errorf("server port must be set")
