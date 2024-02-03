@@ -98,6 +98,7 @@ spec:
         app-name: frontend
     spec:
       {{- if .Values.evenly_distributed }}
+      hostIPC: true
       topologySpreadConstraints:
         - maxSkew: 1
           topologyKey: kubernetes.io/hostname

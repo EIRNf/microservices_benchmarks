@@ -20,3 +20,5 @@ Pyroscope
 helm repo add pyroscope-io https://pyroscope-io.github.io/helm-chart helm install pyroscope pyroscope-io/pyroscope --set service.type=NodePort
 
 kubectl port-forward (podname) -n hotel-res1 4040:4040 --address='0.0.0.0'
+
+kubectl port-forward (podname) --address 0.0.0.0 4040:(podPort) 

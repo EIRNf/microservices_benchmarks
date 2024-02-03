@@ -8,7 +8,6 @@ import (
 	"github.com/harlow/go-micro-services/dialer"
 
 	// F"io/ioutil"
-	"net"
 
 	"github.com/rs/zerolog/log"
 
@@ -71,9 +70,11 @@ func (s *Server) Run() error {
 	}
 
 	// svc := &SearchServer{}
-	srv := grpc.NewServer(opts...)
+	// srv := grpc.NewServer(opts...)
+	srv := notnets_grpc.NewNotnetsServer()
 	pb.RegisterSearchServer(srv, s)
 
+	var err error
 	// init grpc clients
 	if err := s.initGeoClientShm("srv-geo"); err != nil {
 		return err
@@ -82,10 +83,11 @@ func (s *Server) Run() error {
 		return err
 	}
 
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", s.Port))
-	if err != nil {
-		log.Fatal().Msgf("failed to listen: %v", err)
-	}
+	// lis, err := net.Listen("tcp", fmt.Sprintf(":%d", s.Port))
+	// if err != nil {
+	// 	log.Fatal().Msgf("failed to listen: %v", err)
+	// }
+	lis := notnets_grpc.Listen(name)
 
 	// register with consul
 	// jsonFile, err := os.Open("config.json")
@@ -129,7 +131,7 @@ func (s *Server) initGeoClientShm(name string) error {
 
 	// s.Registry.Config.Address
 	// cc, err := notnets_grpc.Dial(s.IpAddr, s.IpAddr+":"+fmt.Sprint(s.Port)+name)
-	cc, err := notnets_grpc.Dial(s.IpAddr, name)
+	cc, err := notnets_grpc.Dial(s.IpAddr+"srv-search", name)
 	if err != nil {
 		return fmt.Errorf("dialer error: %v", err)
 	}

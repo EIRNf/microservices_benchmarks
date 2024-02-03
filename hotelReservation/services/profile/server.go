@@ -8,9 +8,10 @@ import (
 	"gopkg.in/mgo.v2/bson"
 
 	// "io/ioutil"
-	"net"
+
 	"time"
 
+	"github.com/EIRNf/notnets_grpc"
 	"github.com/rs/zerolog/log"
 
 	"github.com/google/uuid"
@@ -38,6 +39,8 @@ type Server struct {
 	MongoSession *mgo.Session
 	Registry     *registry.Client
 	MemcClient   *memcache.Client
+
+	pb.UnimplementedProfileServer
 }
 
 // Run starts the server
@@ -67,14 +70,16 @@ func (s *Server) Run() error {
 		opts = append(opts, tlsopt)
 	}
 
-	srv := grpc.NewServer(opts...)
+	srv := notnets_grpc.NewNotnetsServer()
 
 	pb.RegisterProfileServer(srv, s)
 
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", s.Port))
-	if err != nil {
-		log.Fatal().Msgf("failed to configure listener: %v", err)
-	}
+	// lis, err := net.Listen("tcp", fmt.Sprintf(":%d", s.Port))
+	// if err != nil {
+	// 	log.Fatal().Msgf("failed to configure listener: %v", err)
+	// }
+
+	lis := notnets_grpc.Listen(name)
 
 	// register the service
 	// jsonFile, err := os.Open("config.json")
@@ -89,7 +94,7 @@ func (s *Server) Run() error {
 	// var result map[string]string
 	// json.Unmarshal([]byte(byteValue), &result)
 
-	err = s.Registry.Register(name, s.uuid, s.IpAddr, s.Port)
+	err := s.Registry.Register(name, s.uuid, s.IpAddr, s.Port)
 	if err != nil {
 		return fmt.Errorf("failed register: %v", err)
 	}

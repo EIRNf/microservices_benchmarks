@@ -96,7 +96,7 @@ func (s *Server) Run() error {
 	// if err != nil {
 	// 	return fmt.Errorf("failed to listen: %v", err)
 	// }
-	lis := notnets_grpc.Listen("srv-geo")
+	lis := notnets_grpc.Listen(name)
 
 	// register the service
 	// jsonFile, err := os.Open("config.json")
@@ -132,7 +132,6 @@ func (s *Server) Shutdown() {
 // Nearby returns all hotels within a given distance.
 func (s *Server) Nearby(ctx context.Context, req *pb.Request) (*pb.Result, error) {
 	log.Trace().Msgf("In geo Nearby")
-	log.Info().Msgf("In geo Nearby")
 
 	var (
 		points = s.getNearbyPoints(ctx, float64(req.Lat), float64(req.Lon))

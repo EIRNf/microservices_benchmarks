@@ -5,9 +5,11 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"time"
 
 	"google.golang.org/grpc"
 
+	"github.com/EIRNf/notnets_grpc"
 	recommendation "github.com/harlow/go-micro-services/services/recommendation/proto"
 	reservation "github.com/harlow/go-micro-services/services/reservation/proto"
 	user "github.com/harlow/go-micro-services/services/user/proto"
@@ -45,12 +47,12 @@ func (s *Server) Run() error {
 	}
 
 	log.Info().Msg("Initializing gRPC clients...")
-	if err := s.initSearchClient("srv-search"); err != nil {
+	if err := s.initSearchClientShm("srv-search"); err != nil {
 		log.Err(err)
 		return err
 	}
 
-	if err := s.initProfileClient("srv-profile"); err != nil {
+	if err := s.initProfileClientShm("srv-profile"); err != nil {
 		log.Err(err)
 		return err
 	}
@@ -65,7 +67,7 @@ func (s *Server) Run() error {
 		return err
 	}
 
-	if err := s.initReservation("srv-reservation"); err != nil {
+	if err := s.initReservationClientShm("srv-reservation"); err != nil {
 		return err
 	}
 	log.Info().Msg("Successfull")
@@ -93,6 +95,51 @@ func (s *Server) Run() error {
 		log.Info().Msg("Serving http")
 		return srv.ListenAndServe()
 	}
+}
+
+func (s *Server) initSearchClientShm(name string) error {
+	// Construct Channel with necessary parameters to talk to the Server
+	// cc := shmgrpc.NewChannel(s.IpAddr+":"+fmt.Sprint(s.Port), name)
+
+	// s.Registry.Config.Address
+	// cc, err := notnets_grpc.Dial(s.IpAddr, s.IpAddr+":"+fmt.Sprint(s.Port)+name)
+	cc, err := notnets_grpc.Dial(s.IpAddr+"frontend1", name)
+	if err != nil {
+		return fmt.Errorf("dialer error: %v", err)
+	}
+	time.Sleep(10 * time.Second)
+	s.searchClient = search.NewSearchClient(cc)
+	return nil
+}
+
+func (s *Server) initReservationClientShm(name string) error {
+	// Construct Channel with necessary parameters to talk to the Server
+	// cc := shmgrpc.NewChannel(s.IpAddr+":"+fmt.Sprint(s.Port), name)
+
+	// s.Registry.Config.Address
+	// cc, err := notnets_grpc.Dial(s.IpAddr, s.IpAddr+":"+fmt.Sprint(s.Port)+name)
+	cc, err := notnets_grpc.Dial(s.IpAddr+"frontend2", name)
+	if err != nil {
+		return fmt.Errorf("dialer error: %v", err)
+	}
+	time.Sleep(10 * time.Second)
+	s.reservationClient = reservation.NewReservationClient(cc)
+	return nil
+}
+
+func (s *Server) initProfileClientShm(name string) error {
+	// Construct Channel with necessary parameters to talk to the Server
+	// cc := shmgrpc.NewChannel(s.IpAddr+":"+fmt.Sprint(s.Port), name)
+
+	// s.Registry.Config.Address
+	// cc, err := notnets_grpc.Dial(s.IpAddr, s.IpAddr+":"+fmt.Sprint(s.Port)+name)
+	cc, err := notnets_grpc.Dial(s.IpAddr+"frontend3", name)
+	if err != nil {
+		return fmt.Errorf("dialer error: %v", err)
+	}
+	time.Sleep(10 * time.Second)
+	s.profileClient = profile.NewProfileClient(cc)
+	return nil
 }
 
 func (s *Server) initSearchClient(name string) error {

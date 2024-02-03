@@ -4,6 +4,7 @@ import (
 	// "encoding/json"
 	"fmt"
 
+	"github.com/EIRNf/notnets_grpc"
 	"github.com/google/uuid"
 	"github.com/grpc-ecosystem/grpc-opentracing/go/otgrpc"
 	"github.com/harlow/go-micro-services/registry"
@@ -17,7 +18,7 @@ import (
 	"gopkg.in/mgo.v2/bson"
 
 	// "io/ioutil"
-	"net"
+
 	"time"
 
 	"github.com/bradfitz/gomemcache/memcache"
@@ -38,6 +39,8 @@ type Server struct {
 	Registry     *registry.Client
 	MemcClient   *memcache.Client
 	uuid         string
+
+	pb.UnimplementedReservationServer
 }
 
 // Run starts the server
@@ -65,14 +68,17 @@ func (s *Server) Run() error {
 		opts = append(opts, tlsopt)
 	}
 
-	srv := grpc.NewServer(opts...)
+	// srv := grpc.NewServer(opts...)
+	srv := notnets_grpc.NewNotnetsServer()
 
 	pb.RegisterReservationServer(srv, s)
 
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", s.Port))
-	if err != nil {
-		log.Fatal().Msgf("failed to listen: %v", err)
-	}
+	// lis, err := net.Listen("tcp", fmt.Sprintf(":%d", s.Port))
+	// if err != nil {
+	// 	log.Fatal().Msgf("failed to listen: %v", err)
+	// }
+
+	lis := notnets_grpc.Listen(name)
 
 	// register the service
 	// jsonFile, err := os.Open("config.json")
@@ -89,7 +95,7 @@ func (s *Server) Run() error {
 
 	log.Trace().Msgf("In reservation s.IpAddr = %s, port = %d", s.IpAddr, s.Port)
 
-	err = s.Registry.Register(name, s.uuid, s.IpAddr, s.Port)
+	err := s.Registry.Register(name, s.uuid, s.IpAddr, s.Port)
 	if err != nil {
 		return fmt.Errorf("failed register: %v", err)
 	}

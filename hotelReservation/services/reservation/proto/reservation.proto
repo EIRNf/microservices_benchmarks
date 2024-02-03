@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+option go_package = "github.com/harlow/go-micro-services/services/reservation";
+
 package reservation;
 
 service Reservation {
