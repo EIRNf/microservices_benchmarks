@@ -81,8 +81,8 @@ affinity: {}
 evenly_distributed: true
 
 environments: 
-    # - name: LOG_LEVEL
-      # value: "TRACE"
+    - name: LOG_LEVEL
+      value: "TRACE"
 
 
 persistentVolume:
@@ -141,6 +141,11 @@ jaeger:
 frontend:
   service:
     type: NodePort
+  spec:
+    hostIPC: true
+    template:
+      spec:
+        hostIPC: true
 
 geo:
   spec:
@@ -149,10 +154,22 @@ geo:
       spec:
         hostIPC: true
 
-#profile:
+profile:
+  spec:
+    hostIPC: true
+    template:
+      spec:
+        hostIPC: true
+
 #rate:
 #recommendation:
-#reservation:
+reservation:
+  spec:
+    hostIPC: true
+    template:
+      spec:
+        hostIPC: true
+
 search:
   spec:
     hostIPC: true

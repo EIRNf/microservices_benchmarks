@@ -4,7 +4,9 @@ import (
 	"encoding/json"
 	"flag"
 	"io/ioutil"
+	"math"
 	"os"
+	"runtime/debug"
 	"strconv"
 	"time"
 
@@ -68,6 +70,9 @@ func main() {
 		IpAddr:     serv_ip,
 		Port:       serv_port,
 	}
+
+	debug.SetGCPercent(-1)
+	debug.SetMemoryLimit(math.MaxInt64)
 
 	log.Info().Msg("Starting server...")
 	log.Fatal().Msg(srv.Run().Error())

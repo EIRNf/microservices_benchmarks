@@ -2,6 +2,9 @@
 
 # Set the number of instances you want to run
 num_instances=1
+reqs=1000
+endpoint=hotels
+url=http://127.0.0.1:4040
 
 run_program() {
     instance_id=$1
@@ -67,7 +70,7 @@ rm -f "$prefix"*
 
 start=`date +%s.%N`
 for ((i=1; i<=$num_instances; i++)); do
-    run_program $i "-url=http://192.168.49.2:30252 -endpoint=hotels -reqs=6000" &
+    run_program $i "-reqs $reqs -endpoint $endpoint -url $url" &
 done
 wait
 end=`date +%s.%N`

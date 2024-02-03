@@ -132,6 +132,7 @@ spec:
         {{- include "hotelres.selectorLabels" . | nindent 8 }}
         app-name: reservation
     spec:
+      hostIPC: true
       {{- if .Values.evenly_distributed }}
       topologySpreadConstraints:
         - maxSkew: 1
