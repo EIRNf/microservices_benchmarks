@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set the number of instances you want to run
-num_instances=1
+num_instances=8
 reqs=1000
 endpoint=hotels
 url=http://127.0.0.1:4040
