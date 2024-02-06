@@ -127,12 +127,12 @@ type Hotel struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id          string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Name        string   `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	PhoneNumber string   `protobuf:"bytes,3,opt,name=phoneNumber,proto3" json:"phoneNumber,omitempty"`
-	Description string   `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty"`
-	Address     *Address `protobuf:"bytes,5,opt,name=address,proto3" json:"address,omitempty"`
-	Images      []*Image `protobuf:"bytes,6,rep,name=images,proto3" json:"images,omitempty"`
+	Id          string   `protobuf:"bytes,1,opt,name=id,proto3" bson:"id,omitempty"  json:"id,omitempty"` 
+	Name        string   `protobuf:"bytes,2,opt,name=name,proto3" bson:"name,omitempty" json:"name,omitempty"`
+	PhoneNumber string   `protobuf:"bytes,3,opt,name=phoneNumber,proto3" bson:"phoneNumber,omitempty" json:"phoneNumber,omitempty"`
+	Description string   `protobuf:"bytes,4,opt,name=description,proto3" bson:"description,omitempty" json:"description,omitempty"`
+	Address     *Address `protobuf:"bytes,5,opt,name=address,proto3" bson:"address,omitempty" json:"address,omitempty`
+	Images      []*Image `protobuf:"bytes,6,rep,name=images,proto3" bson:"images,omitempty" json:"images,omitempty"`
 }
 
 func (x *Hotel) Reset() {
@@ -214,14 +214,14 @@ type Address struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	StreetNumber string  `protobuf:"bytes,1,opt,name=streetNumber,proto3" json:"streetNumber,omitempty"`
-	StreetName   string  `protobuf:"bytes,2,opt,name=streetName,proto3" json:"streetName,omitempty"`
-	City         string  `protobuf:"bytes,3,opt,name=city,proto3" json:"city,omitempty"`
-	State        string  `protobuf:"bytes,4,opt,name=state,proto3" json:"state,omitempty"`
-	Country      string  `protobuf:"bytes,5,opt,name=country,proto3" json:"country,omitempty"`
-	PostalCode   string  `protobuf:"bytes,6,opt,name=postalCode,proto3" json:"postalCode,omitempty"`
-	Lat          float32 `protobuf:"fixed32,7,opt,name=lat,proto3" json:"lat,omitempty"`
-	Lon          float32 `protobuf:"fixed32,8,opt,name=lon,proto3" json:"lon,omitempty"`
+	StreetNumber string  `protobuf:"bytes,1,opt,name=streetNumber,proto3" bson:"streetNumber,omitempty" json:"streetNumber,omitempty"`
+	StreetName   string  `protobuf:"bytes,2,opt,name=streetName,proto3" bson:"streetName,omitempty" json:"streetName,omitempty"`
+	City         string  `protobuf:"bytes,3,opt,name=city,proto3" bson:"city,omitempty" json:"city,omitempty"`
+	State        string  `protobuf:"bytes,4,opt,name=state,proto3" bson:"state,omitempty" json:"state,omitempty"`
+	Country      string  `protobuf:"bytes,5,opt,name=country,proto3" bson:"country,omitempty" json:"country,omitempty"`
+	PostalCode   string  `protobuf:"bytes,6,opt,name=postalCode,proto3" bson:"postalCode,omitempty" json:"postalCode,omitempty"`
+	Lat          float32 `protobuf:"fixed32,7,opt,name=lat,proto3" bson:"lat,omitempty" json:"lat,omitempty"`
+	Lon          float32 `protobuf:"fixed32,8,opt,name=lon,proto3" bson:"lon,omitempty" json:"lon,omitempty"`
 }
 
 func (x *Address) Reset() {
@@ -411,11 +411,8 @@ var file_profile_proto_rawDesc = []byte{
 	0x50, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x12, 0x30, 0x0a, 0x0b, 0x47, 0x65, 0x74, 0x50, 0x72,
 	0x6f, 0x66, 0x69, 0x6c, 0x65, 0x73, 0x12, 0x10, 0x2e, 0x70, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65,
 	0x2e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x0f, 0x2e, 0x70, 0x72, 0x6f, 0x66, 0x69,
-	0x6c, 0x65, 0x2e, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x42, 0x36, 0x5a, 0x34, 0x67, 0x69, 0x74,
-	0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x68, 0x61, 0x72, 0x6c, 0x6f, 0x77, 0x2f, 0x67,
-	0x6f, 0x2d, 0x6d, 0x69, 0x63, 0x72, 0x6f, 0x2d, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73,
-	0x2f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2f, 0x70, 0x72, 0x6f, 0x66, 0x69, 0x6c,
-	0x65, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x6c, 0x65, 0x2e, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x42, 0x0b, 0x5a, 0x09, 0x2e, 0x3b, 0x70,
+	0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (

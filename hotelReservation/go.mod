@@ -54,6 +54,7 @@ require (
 	github.com/bombsimon/wsl/v3 v3.4.0 // indirect
 	github.com/breml/bidichk v0.2.4 // indirect
 	github.com/breml/errchkjson v0.3.1 // indirect
+	github.com/bufbuild/protocompile v0.8.0 // indirect
 	github.com/butuzov/ireturn v0.1.1 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/charithe/durationcheck v0.0.10 // indirect
@@ -61,7 +62,7 @@ require (
 	github.com/codahale/hdrhistogram v0.9.0 // indirect
 	github.com/curioswitch/go-reassign v0.2.0 // indirect
 	github.com/daixiang0/gci v0.10.1 // indirect
-	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/denis-tingaikin/go-header v0.4.3 // indirect
 	github.com/esimonov/ifshort v1.0.4 // indirect
 	github.com/ettle/strcase v0.1.1 // indirect
@@ -154,7 +155,7 @@ require (
 	github.com/pelletier/go-toml v1.9.5 // indirect
 	github.com/pelletier/go-toml/v2 v2.1.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
-	github.com/pmezard/go-difflib v1.0.0 // indirect
+	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/polyfloyd/go-errorlint v1.4.0 // indirect
 	github.com/prometheus/client_golang v1.12.1 // indirect
 	github.com/prometheus/client_model v0.2.0 // indirect
@@ -195,6 +196,7 @@ require (
 	github.com/timonwong/loggercheck v0.9.4 // indirect
 	github.com/tomarrell/wrapcheck/v2 v2.8.1 // indirect
 	github.com/tommy-muehle/go-mnd/v2 v2.5.1 // indirect
+	github.com/uber-go/atomic v0.0.0-00010101000000-000000000000 // indirect
 	github.com/uber/jaeger-lib v1.4.0 // indirect
 	github.com/ultraware/funlen v0.0.3 // indirect
 	github.com/ultraware/whitespace v0.0.5 // indirect
@@ -205,13 +207,13 @@ require (
 	go.uber.org/atomic v1.7.0 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
 	go.uber.org/zap v1.24.0 // indirect
-	golang.org/x/exp v0.0.0-20220722155223-a9213eeb770e // indirect
+	golang.org/x/exp v0.0.0-20230817173708-d852ddb80c63 // indirect
 	golang.org/x/exp/typeparams v0.0.0-20230224173230-c95f2b4c22f2 // indirect
-	golang.org/x/mod v0.10.0 // indirect
+	golang.org/x/mod v0.12.0 // indirect
 	golang.org/x/sync v0.5.0 // indirect
 	golang.org/x/sys v0.14.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
-	golang.org/x/tools v0.9.3 // indirect
+	golang.org/x/tools v0.12.1-0.20230815132531-74c255bcf846 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20231016165738-49dd2c1f3d0b // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect

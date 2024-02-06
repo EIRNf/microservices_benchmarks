@@ -79,7 +79,7 @@ func (s *Server) Run() error {
 	if err := s.initGeoClientShm("srv-geo"); err != nil {
 		return err
 	}
-	if err := s.initRateClient("srv-rate"); err != nil {
+	if err := s.initRateClientShm("srv-rate"); err != nil {
 		return err
 	}
 
@@ -137,6 +137,21 @@ func (s *Server) initGeoClientShm(name string) error {
 	}
 	time.Sleep(10 * time.Second)
 	s.geoClient = geo.NewGeoClient(cc)
+	return nil
+}
+
+func (s *Server) initRateClientShm(name string) error {
+	// Construct Channel with necessary parameters to talk to the Server
+	// cc := shmgrpc.NewChannel(s.IpAddr+":"+fmt.Sprint(s.Port), name)
+
+	// s.Registry.Config.Address
+	// cc, err := notnets_grpc.Dial(s.IpAddr, s.IpAddr+":"+fmt.Sprint(s.Port)+name)
+	cc, err := notnets_grpc.Dial(s.IpAddr+"srv-search", name)
+	if err != nil {
+		return fmt.Errorf("dialer error: %v", err)
+	}
+	time.Sleep(10 * time.Second)
+	s.rateClient = rate.NewRateClient(cc)
 	return nil
 }
 

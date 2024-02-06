@@ -8,10 +8,11 @@ import (
 	"gopkg.in/mgo.v2/bson"
 
 	// "io/ioutil"
-	"net"
+
 	"sort"
 	"time"
 
+	"github.com/EIRNf/notnets_grpc"
 	"github.com/rs/zerolog/log"
 
 	"github.com/google/uuid"
@@ -40,6 +41,8 @@ type Server struct {
 	Registry     *registry.Client
 	MemcClient   *memcache.Client
 	uuid         string
+
+	pb.UnimplementedRateServer
 }
 
 // Run starts the server
@@ -67,14 +70,18 @@ func (s *Server) Run() error {
 		opts = append(opts, tlsopt)
 	}
 
-	srv := grpc.NewServer(opts...)
+	srv := notnets_grpc.NewNotnetsServer()
+
+	// srv := grpc.NewServer(opts...)
 
 	pb.RegisterRateServer(srv, s)
 
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", s.Port))
-	if err != nil {
-		log.Fatal().Msgf("failed to listen: %v", err)
-	}
+	// lis, err := net.Listen("tcp", fmt.Sprintf(":%d", s.Port))
+	// if err != nil {
+	// 	log.Fatal().Msgf("failed to listen: %v", err)
+	// }
+
+	lis := notnets_grpc.Listen(name)
 
 	// register the service
 	// jsonFile, err := os.Open("config.json")
@@ -89,7 +96,7 @@ func (s *Server) Run() error {
 	// var result map[string]string
 	// json.Unmarshal([]byte(byteValue), &result)
 
-	err = s.Registry.Register(name, s.uuid, s.IpAddr, s.Port)
+	err := s.Registry.Register(name, s.uuid, s.IpAddr, s.Port)
 	if err != nil {
 		return fmt.Errorf("failed register: %v", err)
 	}
@@ -148,6 +155,8 @@ func (s *Server) GetRates(ctx context.Context, req *pb.Request) (*pb.Result, err
 				log.Panic().Msgf("Tried to find hotelId [%v], but got error", hotelID, err.Error())
 			} else {
 				for _, r := range tmpRatePlans {
+					log.Trace().Msgf("Rate Plans = %v\n", r)
+
 					ratePlans = append(ratePlans, r)
 					rate_json, err := json.Marshal(r)
 					if err != nil {
@@ -165,7 +174,9 @@ func (s *Server) GetRates(ctx context.Context, req *pb.Request) (*pb.Result, err
 		}
 	}
 
+	log.Trace().Msgf("Starting Sort with = %v", ratePlans)
 	sort.Sort(ratePlans)
+	log.Trace().Msgf("Post Sort with = %v", ratePlans)
 	res.RatePlans = ratePlans
 
 	return res, nil
