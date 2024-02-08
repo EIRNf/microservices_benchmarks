@@ -5,8 +5,8 @@ ARG CACHEBUST=1
 ENV CGO_ENABLED=1
 # ENV GRPC_GO_LOG_VERBOSITY_LEVEL=99
 # ENV GRPC_GO_LOG_SEVERITY_LEVEL=info
-ENV GODEBUG=http2debug=1   
-ENV GODEBUG=http2debug=2
+# ENV GODEBUG=http2debug=1   
+# ENV GODEBUG=http2debug=2
 
 
 RUN git config --global http.sslverify false

@@ -81,8 +81,8 @@ affinity: {}
 evenly_distributed: true
 
 environments: 
-    - name: LOG_LEVEL
-      value: "TRACE"
+    # - name: LOG_LEVEL
+    #   value: "TRACE"
 
 
 persistentVolume:
@@ -161,7 +161,13 @@ profile:
       spec:
         hostIPC: true
 
-#rate:
+rate:
+  spec:
+    hostIPC: true
+    template:
+      spec:
+        hostIPC: true
+
 #recommendation:
 reservation:
   spec:

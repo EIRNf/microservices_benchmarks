@@ -4,9 +4,7 @@ import (
 	"encoding/json"
 	"flag"
 	"io/ioutil"
-	"math"
 	"os"
-	"runtime/debug"
 	"strconv"
 
 	"github.com/harlow/go-micro-services/registry"
@@ -83,9 +81,6 @@ func main() {
 		MongoSession: mongo_session,
 		MemcClient:   memc_client,
 	}
-
-	debug.SetGCPercent(-1)
-	debug.SetMemoryLimit(math.MaxInt64)
 
 	log.Info().Msg("Starting server...")
 	log.Fatal().Msg(srv.Run().Error())

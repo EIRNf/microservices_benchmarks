@@ -1,4 +1,7 @@
-#!/bin/bash -x
+#!/bin/bash -xe 
+
+build=true
+
 
 ## PROJECT VARIABLES
 DOCKER_PROJECT=eirn/dsbpp_hotel_reserv
@@ -13,7 +16,9 @@ DEPLOY_HELM_DIR="$SCRIPT_DIR/deathstarbench-hotelreservation/helm_hotelReservati
 minikube delete && minikube start
 
 ## BUILD
-docker buildx build --push -t $DOCKER_PROJECT:$RELEASE_NAME .
+if [ "$build" = true ] ; then
+    docker buildx build --push -t $DOCKER_PROJECT:$RELEASE_NAME .
+fi
 
 ## DEPLOY
 cd $DEPLOY_HELM_DIR

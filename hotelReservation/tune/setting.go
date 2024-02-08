@@ -13,11 +13,11 @@ import (
 )
 
 var (
-	defaultGCPercent        int    = 100
+	defaultGCPercent        int    = -1
 	defaultMemCTimeout      int    = 2
 	defaultMemCMaxIdleConns int    = 512
 	defaultLogLevel         string = "info"
-	profiling               bool   = false
+	profiling               bool   = true
 )
 
 func setGCPercent() {
@@ -93,6 +93,7 @@ func instantiateProfiling() {
 		ApplicationName: applicationName,
 		ServerAddress:   serverAddress,
 		Logger:          pyroscope.StandardLogger,
+		SampleRate:      101,
 
 		ProfileTypes: []pyroscope.ProfileType{
 			// these profile types are enabled by default:

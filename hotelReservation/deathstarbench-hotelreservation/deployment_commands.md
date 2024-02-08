@@ -18,7 +18,8 @@ helm upgrade --install baseline . --create-namespace --wait --set image.reposito
 helm upgrade --install updatedbaseline . --create-namespace --wait --set image.repository=eirn/dsbpp_hotel_reserv --set image.tag=updated_baseline --set features.gcPercent=1000 --set features.memcTimeout=10 -n hotel-res1 --debug
 
 Pyroscope
-helm repo add pyroscope-io https://pyroscope-io.github.io/helm-chart helm install pyroscope pyroscope-io/pyroscope --set service.type=NodePort
+helm repo add pyroscope-io https://pyroscope-io.github.io/helm-chart 
+helm install pyroscope pyroscope-io/pyroscope --set service.type=NodePort
 
 kubectl port-forward (podname) -n hotel-res1 4040:4040 --address='0.0.0.0'
 
