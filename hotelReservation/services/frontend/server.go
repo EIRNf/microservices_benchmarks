@@ -10,6 +10,8 @@ import (
 	"google.golang.org/grpc"
 
 	"github.com/EIRNf/notnets_grpc"
+	"github.com/fullstorydev/grpchan"
+	"github.com/grpc-ecosystem/grpc-opentracing/go/otgrpc"
 	recommendation "github.com/harlow/go-micro-services/services/recommendation/proto"
 	reservation "github.com/harlow/go-micro-services/services/reservation/proto"
 	user "github.com/harlow/go-micro-services/services/user/proto"
@@ -23,6 +25,8 @@ import (
 	"github.com/harlow/go-micro-services/tls"
 	"github.com/harlow/go-micro-services/tracing"
 	"github.com/opentracing/opentracing-go"
+
+	_ "github.com/ianlancetaylor/cgosymbolizer"
 )
 
 // Server implements frontend service
@@ -107,8 +111,10 @@ func (s *Server) initSearchClientShm(name string) error {
 	if err != nil {
 		return fmt.Errorf("dialer error: %v", err)
 	}
-	time.Sleep(10 * time.Second)
-	s.searchClient = search.NewSearchClient(cc)
+	time.Sleep(3 * time.Second) //TODO
+	intercepted := grpchan.InterceptClientConn(cc, otgrpc.OpenTracingClientInterceptor(s.Tracer), nil)
+
+	s.searchClient = search.NewSearchClient(intercepted)
 	return nil
 }
 
@@ -122,8 +128,11 @@ func (s *Server) initReservationClientShm(name string) error {
 	if err != nil {
 		return fmt.Errorf("dialer error: %v", err)
 	}
-	time.Sleep(10 * time.Second)
-	s.reservationClient = reservation.NewReservationClient(cc)
+	time.Sleep(3 * time.Second) //TODO
+
+	intercepted := grpchan.InterceptClientConn(cc, otgrpc.OpenTracingClientInterceptor(s.Tracer), nil)
+
+	s.reservationClient = reservation.NewReservationClient(intercepted)
 	return nil
 }
 
@@ -137,8 +146,11 @@ func (s *Server) initProfileClientShm(name string) error {
 	if err != nil {
 		return fmt.Errorf("dialer error: %v", err)
 	}
-	time.Sleep(10 * time.Second)
-	s.profileClient = profile.NewProfileClient(cc)
+	time.Sleep(3 * time.Second) //todo
+
+	intercepted := grpchan.InterceptClientConn(cc, otgrpc.OpenTracingClientInterceptor(s.Tracer), nil)
+
+	s.profileClient = profile.NewProfileClient(intercepted)
 	return nil
 }
 

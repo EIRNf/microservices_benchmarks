@@ -10,6 +10,8 @@ import (
 	"github.com/grafana/pyroscope-go"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+
+	_ "github.com/ianlancetaylor/cgosymbolizer"
 )
 
 var (
@@ -17,7 +19,7 @@ var (
 	defaultMemCTimeout      int    = 2
 	defaultMemCMaxIdleConns int    = 512
 	defaultLogLevel         string = "info"
-	profiling               bool   = true
+	profiling               bool   = false
 )
 
 func setGCPercent() {
@@ -116,11 +118,11 @@ func instantiateProfiling() {
 		log.Err(err).Str("service", serverAddress)
 	}
 }
-
 func Init() {
 	setLogLevel()
 	setGCPercent()
 	if profiling {
 		instantiateProfiling()
 	}
+
 }

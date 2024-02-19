@@ -70,9 +70,9 @@ func (s *Server) Run() error {
 		opts = append(opts, tlsopt)
 	}
 
-	srv := notnets_grpc.NewNotnetsServer()
+	svr := notnets_grpc.NewNotnetsServer(notnets_grpc.UnaryInterceptor(otgrpc.OpenTracingServerInterceptor(s.Tracer)))
 
-	pb.RegisterProfileServer(srv, s)
+	pb.RegisterProfileServer(svr, s)
 
 	// lis, err := net.Listen("tcp", fmt.Sprintf(":%d", s.Port))
 	// if err != nil {
@@ -100,7 +100,7 @@ func (s *Server) Run() error {
 	}
 	log.Info().Msg("Successfully registered in consul")
 
-	return srv.Serve(lis)
+	return svr.Serve(lis)
 }
 
 // Shutdown cleans up any processes

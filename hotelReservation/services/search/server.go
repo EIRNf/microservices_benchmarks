@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/EIRNf/notnets_grpc"
+	"github.com/fullstorydev/grpchan"
 	"github.com/harlow/go-micro-services/dialer"
 
 	// F"io/ioutil"
@@ -71,8 +72,8 @@ func (s *Server) Run() error {
 
 	// svc := &SearchServer{}
 	// srv := grpc.NewServer(opts...)
-	srv := notnets_grpc.NewNotnetsServer()
-	pb.RegisterSearchServer(srv, s)
+	svr := notnets_grpc.NewNotnetsServer(notnets_grpc.UnaryInterceptor(otgrpc.OpenTracingServerInterceptor(s.Tracer)))
+	pb.RegisterSearchServer(svr, s)
 
 	var err error
 	// init grpc clients
@@ -108,7 +109,7 @@ func (s *Server) Run() error {
 	}
 	log.Info().Msg("Successfully registered in consul")
 
-	return srv.Serve(lis)
+	return svr.Serve(lis)
 }
 
 // Shutdown cleans up any processes
@@ -135,8 +136,9 @@ func (s *Server) initGeoClientShm(name string) error {
 	if err != nil {
 		return fmt.Errorf("dialer error: %v", err)
 	}
+	intercepted := grpchan.InterceptClientConn(cc, otgrpc.OpenTracingClientInterceptor(s.Tracer), nil)
 	time.Sleep(10 * time.Second)
-	s.geoClient = geo.NewGeoClient(cc)
+	s.geoClient = geo.NewGeoClient(intercepted)
 	return nil
 }
 
@@ -150,8 +152,9 @@ func (s *Server) initRateClientShm(name string) error {
 	if err != nil {
 		return fmt.Errorf("dialer error: %v", err)
 	}
+	intercepted := grpchan.InterceptClientConn(cc, otgrpc.OpenTracingClientInterceptor(s.Tracer), nil)
 	time.Sleep(10 * time.Second)
-	s.rateClient = rate.NewRateClient(cc)
+	s.rateClient = rate.NewRateClient(intercepted)
 	return nil
 }
 
