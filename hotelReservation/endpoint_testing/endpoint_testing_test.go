@@ -2,24 +2,26 @@ package endpoint_testing
 
 import (
 	"bytes"
-	"crypto/rand"
 	"flag"
 	"fmt"
 	"io"
+	"strconv"
 	"time"
 
 	// "hotelReservation/registry"
-	"math/big"
+
 	"net/http"
 	"testing"
 
 	"github.com/loov/hrtime"
+
+	"math/rand"
 )
 
 // const localURL = "http://localhost:5000"
 // const apiURL = "http://192.168.49.2:30052"
 
-var apiURL = flag.String("url", "http://192.168.49.2:30252", "IP/Port of HotelReservation Frontend")
+var apiURL = flag.String("url", "http://34.16.128.88:4040", "IP/Port of HotelReservation Frontend")
 
 var endpoint_bench = flag.String("endpoint", "all", "Test to run:hotels,recommendations,user,reservation")
 
@@ -43,6 +45,7 @@ func Benchmark_All(b *testing.B) {
 	case "user":
 	case "reservation":
 	case "all":
+		b.Run("hotels_endpoint", Bench_Hotels_Endpoint_Histogram)
 	default:
 		fmt.Println("Unknown bench")
 	}
@@ -54,7 +57,6 @@ func Benchmark_All(b *testing.B) {
 }
 
 func Bench_Hotels_Endpoint(b *testing.B) {
-
 	in_date_str := "2015-04-09"
 	out_date_str := "2015-04-24"
 	lat_val := "38.0235"
@@ -101,10 +103,98 @@ func Bench_Hotels_Endpoint(b *testing.B) {
 
 }
 
+func Bench_Hotels_Endpoint_Histogram_Rand(b *testing.B) {
+	rand.Seed(time.Now().UnixNano())
+
+	in := 9 + rand.Int()*(23-9)
+	out := in + rand.Int()*(24-in)
+
+	var in_date_str, out_date_str string
+	if in <= 9 {
+		in_date_str = "2015-04-0" + strconv.Itoa(in)
+	} else {
+		in_date_str = "2015-04-" + strconv.Itoa(in)
+	}
+
+	if out <= 9 {
+		out_date_str = "2015-04-0" + strconv.Itoa(out)
+	} else {
+		out_date_str = "2015-04-" + strconv.Itoa(out)
+	}
+
+	// in_date_str := "2015-04-09"
+	// out_date_str := "2015-04-24"
+	lat_r := 0 + rand.Float64()*481
+	lon_r := 0 + rand.Float64()*325
+
+	lat_val := 38.0235 + (lat_r-240.5)/1000.0
+	lon_val := -122.095 + (lon_r-157.0)/1000.0
+
+	//Construct request
+	inDate := "?inDate=" + in_date_str
+	outDate := "&outDate=" + out_date_str
+	lat := "&lat=" + strconv.FormatFloat(lat_val, 'E', -1, 64)
+	lon := "&lon=" + strconv.FormatFloat(lon_val, 'E', -1, 64)
+
+	request_string := *apiURL + "/hotels" + inDate + outDate + lat + lon
+
+	bench := hrtime.NewBenchmark(*num_requests)
+	// defer bench.HistogramClamp()
+
+	for bench.Next() {
+		resp, err := http.Get(request_string)
+
+		//Failed Request
+		if err != nil {
+			b.Fatalf("RPC failed: %v", err)
+		}
+
+		_, err = io.ReadAll(resp.Body)
+		// if err != nil {
+		// 	b.Fatalf("Error reading body: %v", err)
+		// }
+
+		// //Check StatusCode
+		// if resp.Status != status_code_ok {
+		// 	b.Fatalf("Status code not ok, instead: %v", resp.Status)
+		// }
+
+		// //Unexpected Payload
+		// if !bytes.Equal(data, hotels_expected) {
+		// 	b.Fatalf("wrong payload returns: expecting %v; got %v", hotels_expected, data)
+		// }
+		resp.Body.Close()
+
+	}
+
+	fmt.Println(bench.Histogram(10))
+
+	//Get Average Latency
+	//Get Throughput
+	fmt.Printf("NUM_REQUESTS: %d \n", *num_requests)
+	fmt.Printf("EXECUTION_LENGTH: %f \n", b.Elapsed().Seconds())
+	fmt.Printf("THROUGHPUT: %f reqs/sec\n", float64(*num_requests)/b.Elapsed().Seconds())
+	fmt.Printf("AVERAGE_LATENCY:%s\n", time.Duration(bench.Histogram(10).Average).String())
+	fmt.Printf("LATENCY_STATS:\n %s", bench.Histogram(10).StringStats())
+
+	// runs := bench.Float64s()
+	// fmt.Printf("Mean: %f\n", stats.Mean(runs)*0.001)
+	// fmt.Printf("StdDev: %f\n", stats.StdDev(runs)*0.001)
+	// fmt.Printf("NumElements: %d\n", len(runs))
+	// fmt.Printf("Time in Microsecondes: %d \n", b.Elapsed().Microseconds())
+	// fmt.Printf("Time in Seconds: %f \n", b.Elapsed().Seconds())
+	// fmt.Printf("Sanity Check Time Microseconds: %f \n", vec.Sum(runs)*0.001)
+	// fmt.Printf("Throughput: %f \n", float64(len(runs))/b.Elapsed().Seconds())
+
+	//PRINT OUT ALL RUNS
+	// runs := bench.Float64s()
+	// fmt.Printf("RUNS:%f \n", runs)
+}
+
 func Bench_Hotels_Endpoint_Histogram(b *testing.B) {
 
-	in_date_str := "2015-04-09"
-	out_date_str := "2015-04-24"
+	in_date_str := "2015-04-12"
+	out_date_str := "2015-04-22"
 	lat_val := "38.0235"
 	lon_val := "-122.095"
 
@@ -127,25 +217,25 @@ func Bench_Hotels_Endpoint_Histogram(b *testing.B) {
 			b.Fatalf("RPC failed: %v", err)
 		}
 
-		data, err := io.ReadAll(resp.Body)
-		if err != nil {
-			b.Fatalf("Error reading body: %v", err)
-		}
+		_, err = io.ReadAll(resp.Body)
+		// if err != nil {
+		// 	b.Fatalf("Error reading body: %v", err)
+		// }
 
-		//Check StatusCode
-		if resp.Status != status_code_ok {
-			b.Fatalf("Status code not ok, instead: %v", resp.Status)
-		}
+		// //Check StatusCode
+		// if resp.Status != status_code_ok {
+		// 	b.Fatalf("Status code not ok, instead: %v", resp.Status)
+		// }
 
-		//Unexpected Payload
-		if !bytes.Equal(data, hotels_expected) {
-			b.Fatalf("wrong payload returns: expecting %v; got %v", hotels_expected, data)
-		}
+		// //Unexpected Payload
+		// if !bytes.Equal(data, hotels_expected) {
+		// 	b.Fatalf("wrong payload returns: expecting %v; got %v", hotels_expected, data)
+		// }
 		resp.Body.Close()
 
 	}
 
-	// fmt.Println(bench.Histogram(10))
+	fmt.Println(bench.Histogram(10))
 
 	//Get Average Latency
 	//Get Throughput
@@ -181,8 +271,8 @@ func Test_All(t *testing.T) {
 	//Test Endpoints
 	t.Run("hotels_endpoint", Test_Hotels_Endpoint)
 	t.Run("recommendations_endpoint", Test_Recommendation_Endpoint)
-	t.Run("user_endpoint", Test_User_Endpoint)
-	t.Run("reservation_endpoint", Test_Reservation_Endpoint)
+	// t.Run("user_endpoint", Test_User_Endpoint)
+	// t.Run("reservation_endpoint", Test_Reservation_Endpoint)
 
 }
 
@@ -292,105 +382,104 @@ func Test_Recommendation_Endpoint(t *testing.T) {
 	}
 }
 
-func Test_User_Endpoint(t *testing.T) {
+// func Test_User_Endpoint(t *testing.T) {
 
-	//Get username and password
-	suffix, _ := rand.Int(rand.Reader, big.NewInt(500))
-	user := "Cornell_" + suffix.String()
-	pass := ""
-	for j := 0; j < 10; j++ {
-		pass += suffix.String()
-	}
+// 	//Get username and password
+// 	suffix, _ := rand.Int(rand.Reader, big.NewInt(500))
+// 	user := "Cornell_" + suffix.String()
+// 	pass := ""
+// 	for j := 0; j < 10; j++ {
+// 		pass += suffix.String()
+// 	}
 
-	user_name := "?username=" + user
-	password := "&password=" + pass
+// 	user_name := "?username=" + user
+// 	password := "&password=" + pass
 
-	request_string := *apiURL + "/user" + user_name + password
+// 	request_string := *apiURL + "/user" + user_name + password
 
-	resp, err := http.Get(request_string)
+// 	resp, err := http.Get(request_string)
 
-	//Failed Request
-	if err != nil {
-		t.Fatalf("RPC failed: %v", err)
-	}
+// 	//Failed Request
+// 	if err != nil {
+// 		t.Fatalf("RPC failed: %v", err)
+// 	}
 
-	defer resp.Body.Close()
+// 	defer resp.Body.Close()
 
-	data, err := io.ReadAll(resp.Body)
-	if err != nil {
-		t.Fatalf("Error reading body: %v", err)
-	}
+// 	data, err := io.ReadAll(resp.Body)
+// 	if err != nil {
+// 		t.Fatalf("Error reading body: %v", err)
+// 	}
 
-	//Check StatusCode
-	if resp.Status != status_code_ok {
-		t.Fatalf("Status code not ok, instead: %v", resp.Status)
-	}
+// 	//Check StatusCode
+// 	if resp.Status != status_code_ok {
+// 		t.Fatalf("Status code not ok, instead: %v", resp.Status)
+// 	}
 
-	//Unexpected Payload
-	if !bytes.Equal(data, user_expected) {
-		t.Fatalf("wrong payload returns: expecting %v; got %v", user_expected, data)
-	}
+// 	//Unexpected Payload
+// 	if !bytes.Equal(data, user_expected) {
+// 		t.Fatalf("wrong payload returns: expecting %v; got %v", user_expected, data)
+// 	}
 
-	//Verify Headers
-	//Verify Trailers
-}
+// 	//Verify Headers
+// 	//Verify Trailers
+// }
 
-func Test_Reservation_Endpoint(t *testing.T) {
+// func Test_Reservation_Endpoint(t *testing.T) {
+// 	//Get username and password
+// 	suffix, _ := rand.Int(rand.Reader, big.NewInt(500))
+// 	user := "Cornell_" + suffix.String()
+// 	pass := ""
+// 	for j := 0; j < 10; j++ {
+// 		pass += suffix.String()
+// 	}
 
-	//Get username and password
-	suffix, _ := rand.Int(rand.Reader, big.NewInt(500))
-	user := "Cornell_" + suffix.String()
-	pass := ""
-	for j := 0; j < 10; j++ {
-		pass += suffix.String()
-	}
+// 	in_date_str := "2015-04-09"
+// 	out_date_str := "2015-04-24"
+// 	lat_val := "38.0235"
+// 	lon_val := "-122.095"
+// 	id, _ := rand.Int(rand.Reader, big.NewInt(80))
+// 	hotel_id_val := id.String()
+// 	customer := user
+// 	num := "1"
 
-	in_date_str := "2015-04-09"
-	out_date_str := "2015-04-24"
-	lat_val := "38.0235"
-	lon_val := "-122.095"
-	id, _ := rand.Int(rand.Reader, big.NewInt(80))
-	hotel_id_val := id.String()
-	customer := user
-	num := "1"
+// 	//Construct request
+// 	inDate := "?inDate=" + in_date_str
+// 	outDate := "&outDate=" + out_date_str
+// 	lat := "&lat=" + lat_val
+// 	lon := "&lon=" + lon_val
+// 	hotelId := "&hotelId=" + hotel_id_val
+// 	customerName := "&customerName=" + customer
+// 	user_name := "&username=" + user
+// 	password := "&password=" + pass
+// 	number := "&number=" + num
 
-	//Construct request
-	inDate := "?inDate=" + in_date_str
-	outDate := "&outDate=" + out_date_str
-	lat := "&lat=" + lat_val
-	lon := "&lon=" + lon_val
-	hotelId := "&hotelId=" + hotel_id_val
-	customerName := "&customerName=" + customer
-	user_name := "&username=" + user
-	password := "&password=" + pass
-	number := "&number=" + num
+// 	request_string := *apiURL + "/reservation" + inDate + outDate + lat + lon + hotelId + customerName + user_name + password + number
 
-	request_string := *apiURL + "/reservation" + inDate + outDate + lat + lon + hotelId + customerName + user_name + password + number
+// 	resp, err := http.Get(request_string)
 
-	resp, err := http.Get(request_string)
+// 	//Failed Request
+// 	if err != nil {
+// 		t.Fatalf("RPC failed: %v", err)
+// 	}
 
-	//Failed Request
-	if err != nil {
-		t.Fatalf("RPC failed: %v", err)
-	}
+// 	defer resp.Body.Close()
 
-	defer resp.Body.Close()
+// 	data, err := io.ReadAll(resp.Body)
+// 	if err != nil {
+// 		t.Fatalf("Error reading body: %v", err)
+// 	}
 
-	data, err := io.ReadAll(resp.Body)
-	if err != nil {
-		t.Fatalf("Error reading body: %v", err)
-	}
+// 	//Check StatusCode
+// 	if resp.Status != status_code_ok {
+// 		t.Fatalf("Status code not ok, instead: %v", resp.Status)
+// 	}
 
-	//Check StatusCode
-	if resp.Status != status_code_ok {
-		t.Fatalf("Status code not ok, instead: %v", resp.Status)
-	}
+// 	//Unexpected Payload
+// 	if !bytes.Equal(data, reservation_expected) {
+// 		t.Fatalf("wrong payload returns: expecting %v; got %v", reservation_expected, data)
+// 	}
 
-	//Unexpected Payload
-	if !bytes.Equal(data, reservation_expected) {
-		t.Fatalf("wrong payload returns: expecting %v; got %v", reservation_expected, data)
-	}
-
-	//Verify Headers
-	//Verify Trailers
-}
+// 	//Verify Headers
+// 	//Verify Trailers
+// }

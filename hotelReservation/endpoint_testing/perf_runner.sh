@@ -1,10 +1,13 @@
 #!/bin/bash
 
 # Set the number of instances you want to run
-num_instances=1
-reqs=1000
+reqs=$1
+num_instances=$2
+# output_dir=
 endpoint=hotels
-url=http://127.0.0.1:4040
+url=http://34.125.216.113:4040
+
+
 
 run_program() {
     instance_id=$1
