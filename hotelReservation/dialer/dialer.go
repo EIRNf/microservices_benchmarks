@@ -20,7 +20,7 @@ import (
 // DialOption allows optional config for dialer
 type DialOption func(name string) (grpc.DialOption, error)
 
-// Dial returns a load balanced grpc client conn with tracing interceptor
+// Dial returns a load balanced grpc client conn with tracing interceptorp
 func Dial(name string, registry *registry.Client, tracer opentracing.Tracer) (*grpc.ClientConn, error) {
 
 	client := registry

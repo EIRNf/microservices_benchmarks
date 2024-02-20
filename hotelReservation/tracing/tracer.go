@@ -1,12 +1,12 @@
 package tracing
 
 import (
-	"time"
 	"os"
 	"strconv"
+	"time"
 
-	"github.com/rs/zerolog/log"
 	opentracing "github.com/opentracing/opentracing-go"
+	"github.com/rs/zerolog/log"
 	"github.com/uber/jaeger-client-go/config"
 )
 
@@ -34,11 +34,18 @@ func Init(serviceName, host string) (opentracing.Tracer, error) {
 			BufferFlushInterval: 1 * time.Second,
 			LocalAgentHostPort:  host,
 		},
+		RPCMetrics: true,
 	}
 
 	tracer, _, err := cfg.New(serviceName)
 	if err != nil {
 		return nil, err
 	}
+
+	// otelTracer := otel.GetTracerProvider().Tracer("tracer_name")
+
+	// bridgeTracer, wrapperTracerProvider := otelBridge.NewTracerPair(otelTracer)
+
+	// otel.SetTracerProvider(wrapperTracerProvider)
 	return tracer, nil
 }

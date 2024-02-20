@@ -45,7 +45,7 @@ type Server struct {
 
 	pb.UnimplementedGeoServer
 
-	shmserver *notnets_grpc.NotnetsServer
+	// shmserver *notnets_grpc.NotnetsServer
 }
 
 // Run starts the server
@@ -88,7 +88,8 @@ func (s *Server) Run() error {
 	// pb.RegisterSearchServer(srv, s)
 
 	// svc := &GeoServer{}
-	svr := notnets_grpc.NewNotnetsServer()
+
+	svr := notnets_grpc.NewNotnetsServer(notnets_grpc.UnaryInterceptor(otgrpc.OpenTracingServerInterceptor(s.Tracer)))
 	pb.RegisterGeoServer(svr, s)
 
 	// listener
@@ -126,7 +127,7 @@ func (s *Server) Run() error {
 // Shutdown cleans up any processes
 func (s *Server) Shutdown() {
 	s.Registry.Deregister(s.uuid)
-	s.shmserver.Stop()
+	// s.shmserver.Stop()
 }
 
 // Nearby returns all hotels within a given distance.

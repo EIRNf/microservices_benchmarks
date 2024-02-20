@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package profile;
 
-option go_package = "github.com/harlow/go-micro-services/services/profile";
+option go_package = ".;profile";
 
 
 service Profile {

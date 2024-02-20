@@ -1,4 +1,6 @@
-#!/bin/bash -x
+#!/bin/bash -xe 
+
+build=true
 
 ## PROJECT VARIABLES
 DOCKER_PROJECT=eirn/dsbpp_hotel_reserv
@@ -10,10 +12,22 @@ SCRIPT_DIR="$(pwd)"
 DEPLOY_HELM_DIR="$SCRIPT_DIR/deathstarbench-hotelreservation/helm_hotelReservation"
 
 ## CLEAN KUBERNETES 
-minikube delete && minikube start
+minikube delete
+# minikube start
+ minikube start --extra-config=kubelet.feature-gates="CPUManager=true"
+# minikube start --extra-config=kubelet.feature-gates="CPUManager=true" --extra-config=kubelet.config=$SCRIPT_DIR/deathstarbench-hotelreservation/kubelet.yaml
+
+
+# minikube start --feature-gates=CPUManager=true --v=5 --force-systemd=true  --extra-config=kubeadm.ignore-preflight-errors=SystemVerification --extra-config=kubelet.config=kubelet.config=$SCRIPT_DIR/deathstarbench-hotelreservation/kubelet.yaml
+
+
+# --extra-config=kubelet.config=$SCRIPT_DIR/deathstarbench-hotelreservation/kubelet.yaml
+
 
 ## BUILD
-docker buildx build --push -t $DOCKER_PROJECT:$RELEASE_NAME .
+if [ "$build" = true ] ; then
+    docker buildx build --push -t $DOCKER_PROJECT:$RELEASE_NAME .
+fi
 
 ## DEPLOY
 cd $DEPLOY_HELM_DIR

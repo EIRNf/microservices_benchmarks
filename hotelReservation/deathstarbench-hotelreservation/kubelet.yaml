@@ -1,0 +1,11 @@
+apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+
+# cgroupDriver: systemd
+cpuManagerPolicy: "static"
+cpuManagerPolicyOptions:
+  - full-pcpus-only: "true"
+  # - distribute-cpus-across-numa: "false"
+  # - align-by-socket: "false"
+
+

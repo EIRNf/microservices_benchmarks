@@ -58,11 +58,11 @@ resources: {}
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
   # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
+  #   cpu: "1"
+  #   memory: 1000Mi
   # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
+  #   cpu: "1"
+  #   memory: 1000Mi
 
 autoscaling:
   enabled: false
@@ -81,8 +81,8 @@ affinity: {}
 evenly_distributed: true
 
 environments: 
-    - name: LOG_LEVEL
-      value: "TRACE"
+    # - name: LOG_LEVEL
+    #   value: "TRACE"
 
 
 persistentVolume:
@@ -96,11 +96,11 @@ features:
   #  - TLS_XXX: Enabled, using the specified Cipher suite, see tls/options.go#L22
   tls: 0
   # Ratio of request will be traced by Jaeger
-  jaegerSampleRatio: "0.1"
+  jaegerSampleRatio: "0.01"
   # golang GCPercent value
-  gcPercent: 100
+  gcPercent: -1
   # memcached client timeout value in seconds
-  memcTimeout: 2
+  memcTimeout: 3
 # End of common default settings
 
 # Beginning of microservice specific settings
@@ -146,6 +146,13 @@ frontend:
     template:
       spec:
         hostIPC: true
+  resource:
+    limits:
+      cpu: "3"
+      memory:  4G
+    # requests:
+    #   cpu: "1"
+    #   memory: 1000Mi
 
 geo:
   spec:
@@ -161,7 +168,13 @@ profile:
       spec:
         hostIPC: true
 
-#rate:
+rate:
+  spec:
+    hostIPC: true
+    template:
+      spec:
+        hostIPC: true
+
 #recommendation:
 reservation:
   spec:
@@ -169,6 +182,10 @@ reservation:
     template:
       spec:
         hostIPC: true
+  resource:
+  limits:
+    cpu: "3"
+    memory: 4G 
 
 search:
   spec:
@@ -176,6 +193,10 @@ search:
     template:
       spec:
         hostIPC: true
+  resource:
+    limits:
+      cpu: "3"
+      memory:  4G
 
 # user:
 

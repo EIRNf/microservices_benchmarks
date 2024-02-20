@@ -10,10 +10,12 @@ import (
 	"github.com/grafana/pyroscope-go"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+
+	_ "github.com/ianlancetaylor/cgosymbolizer"
 )
 
 var (
-	defaultGCPercent        int    = 100
+	defaultGCPercent        int    = -1
 	defaultMemCTimeout      int    = 2
 	defaultMemCMaxIdleConns int    = 512
 	defaultLogLevel         string = "info"
@@ -93,6 +95,7 @@ func instantiateProfiling() {
 		ApplicationName: applicationName,
 		ServerAddress:   serverAddress,
 		Logger:          pyroscope.StandardLogger,
+		SampleRate:      101,
 
 		ProfileTypes: []pyroscope.ProfileType{
 			// these profile types are enabled by default:
@@ -115,11 +118,11 @@ func instantiateProfiling() {
 		log.Err(err).Str("service", serverAddress)
 	}
 }
-
 func Init() {
 	setLogLevel()
 	setGCPercent()
 	if profiling {
 		instantiateProfiling()
 	}
+
 }

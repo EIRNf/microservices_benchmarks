@@ -1,0 +1,7 @@
+Num Instances: 8
+Total Requests: 40000
+Longest Execution: 61.212422
+Calculated Throughput(longest_execution): 653.462135512298
+Calculated Throughput(runtime): 641.033296453919
+Averaged Throughput per Instance: 81.852845625
+Averaged Latency per Instance: 12.216871375

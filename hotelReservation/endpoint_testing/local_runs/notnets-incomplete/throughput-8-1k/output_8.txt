@@ -1,0 +1,28 @@
+  avg 12.5ms;  min 728µs;  p50 11.7ms;  max 50.9ms;
+  p90 16.5ms;  p99 27.6ms;  p999 50.9ms;  p9999 50.9ms;
+      728µs [128] ██████
+       10ms [831] ████████████████████████████████████████
+       20ms [ 36] █▌
+       30ms [  4] 
+       40ms [  0] 
+       50ms [  1] 
+       60ms [  0] 
+       70ms [  0] 
+       80ms [  0] 
+       90ms [  0] 
+
+NUM_REQUESTS: 1000 
+EXECUTION_LENGTH: 12.577323 
+THROUGHPUT: 79.508133 reqs/sec
+AVERAGE_LATENCY:12.577035ms
+LATENCY_STATS:
+   avg 12.5ms;  min 728µs;  p50 11.7ms;  max 50.9ms;
+  p90 16.5ms;  p99 27.6ms;  p999 50.9ms;  p9999 50.9ms;
+ERROR_COUNT: 10 
+goos: linux
+goarch: amd64
+pkg: endpoint_testing
+cpu: Intel(R) Xeon(R) CPU @ 2.80GHz
+Benchmark_All/hotels_endpoint-8         	       1	12577664558 ns/op
+PASS
+ok  	endpoint_testing	12.614s
