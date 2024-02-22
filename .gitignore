@@ -11,3 +11,14 @@ wrk2/wrk
 go.mod
 go.work
 go.work.sum
+
+
+
+
+hotelReservation/endpoint_testing/jeager/geo/*
+hotelReservation/endpoint_testing/jeager/frontend/*
+hotelReservation/endpoint_testing/jeager/search/*
+hotelReservation/endpoint_testing/jeager/profile/*
+hotelReservation/endpoint_testing/jeager/rate/*
+hotelReservation/endpoint_testing/jeager/reservation/*
+hotelReservation/endpoint_testing/jeager/jaeger-query/*
