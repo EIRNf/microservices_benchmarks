@@ -1,10 +1,11 @@
 #!/bin/bash -xe 
 
-build=true
+# True for build and push, will overwrite release name
+build=$1
 
 ## PROJECT VARIABLES
 DOCKER_PROJECT=eirn/dsbpp_hotel_reserv
-RELEASE_NAME=shm
+RELEASE_NAME=$2
 
 ## LOCAL VARIABLES
 cd "$(dirname "$0")"
