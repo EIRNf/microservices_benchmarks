@@ -63,7 +63,7 @@ func Test_ser_deser(t *testing.T) {
 	locale := "en"
 	// }
 
-	cc, _ := notnets_grpc.Dial("testtest", "http://127.0.0.1:8080/hello")
+	cc, _ := notnets_grpc.Dial("testtest", "http://127.0.0.1:8080/hello", notnets_grpc.MESSAGE_SIZE)
 	profileClient := profile.NewProfileClient(cc)
 
 	hotelIds := []string{"39", "42"}

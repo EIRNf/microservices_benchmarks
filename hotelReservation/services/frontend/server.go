@@ -107,7 +107,7 @@ func (s *Server) initSearchClientShm(name string) error {
 
 	// s.Registry.Config.Address
 	// cc, err := notnets_grpc.Dial(s.IpAddr, s.IpAddr+":"+fmt.Sprint(s.Port)+name)
-	cc, err := notnets_grpc.Dial(s.IpAddr+"frontend1", name)
+	cc, err := notnets_grpc.Dial(s.IpAddr+"frontend-search", name, notnets_grpc.MESSAGE_SIZE)
 	if err != nil {
 		return fmt.Errorf("dialer error: %v", err)
 	}
@@ -124,7 +124,7 @@ func (s *Server) initReservationClientShm(name string) error {
 
 	// s.Registry.Config.Address
 	// cc, err := notnets_grpc.Dial(s.IpAddr, s.IpAddr+":"+fmt.Sprint(s.Port)+name)
-	cc, err := notnets_grpc.Dial(s.IpAddr+"frontend2", name)
+	cc, err := notnets_grpc.Dial(s.IpAddr+"frontend-reservation", name, notnets_grpc.MESSAGE_SIZE)
 	if err != nil {
 		return fmt.Errorf("dialer error: %v", err)
 	}
@@ -142,7 +142,7 @@ func (s *Server) initProfileClientShm(name string) error {
 
 	// s.Registry.Config.Address
 	// cc, err := notnets_grpc.Dial(s.IpAddr, s.IpAddr+":"+fmt.Sprint(s.Port)+name)
-	cc, err := notnets_grpc.Dial(s.IpAddr+"frontend3", name)
+	cc, err := notnets_grpc.Dial(s.IpAddr+"frontend-profile", name, notnets_grpc.MESSAGE_SIZE)
 	if err != nil {
 		return fmt.Errorf("dialer error: %v", err)
 	}

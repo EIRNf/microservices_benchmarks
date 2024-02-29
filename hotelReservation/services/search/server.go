@@ -132,7 +132,7 @@ func (s *Server) initGeoClientShm(name string) error {
 
 	// s.Registry.Config.Address
 	// cc, err := notnets_grpc.Dial(s.IpAddr, s.IpAddr+":"+fmt.Sprint(s.Port)+name)
-	cc, err := notnets_grpc.Dial(s.IpAddr+"srv-search", name)
+	cc, err := notnets_grpc.Dial(s.IpAddr+"srv-search-geo", name, notnets_grpc.MESSAGE_SIZE)
 	if err != nil {
 		return fmt.Errorf("dialer error: %v", err)
 	}
@@ -148,7 +148,7 @@ func (s *Server) initRateClientShm(name string) error {
 
 	// s.Registry.Config.Address
 	// cc, err := notnets_grpc.Dial(s.IpAddr, s.IpAddr+":"+fmt.Sprint(s.Port)+name)
-	cc, err := notnets_grpc.Dial(s.IpAddr+"srv-search", name)
+	cc, err := notnets_grpc.Dial(s.IpAddr+"srv-search-rate", name, notnets_grpc.MESSAGE_SIZE)
 	if err != nil {
 		return fmt.Errorf("dialer error: %v", err)
 	}
