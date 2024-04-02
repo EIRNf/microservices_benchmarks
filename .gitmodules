@@ -1,3 +1,6 @@
 [submodule "shm_tests/two_pod_grpc_k8s/grpchan"]
 	path = shm_tests/two_pod_grpc_k8s/grpchan
 	url = https://github.com/EIRNf/grpchan.git
+[submodule "hotelReservation/vendor/github.com/EIRNf/notnets_grpc"]
+	path = hotelReservation/notnets_grpc
+	url = https://github.com/EIRNf/notnets_grpc.git

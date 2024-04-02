@@ -4,7 +4,7 @@ go 1.20
 
 replace github.com/harlow/go-micro-services => ./
 
-replace github.com/EIRNf/notnets_grpc => ./vendor/github.com/EIRNf/notnets_grpc
+replace github.com/EIRNf/notnets_grpc => ./notnets_grpc
 
 // replace github.com/armon/go-metrics => github.com/hashicorp/go-metrics v0.5.1
 
@@ -27,7 +27,7 @@ require (
 	github.com/uber/jaeger-client-go v2.30.0+incompatible
 	golang.org/x/net v0.18.0
 	google.golang.org/grpc v1.60.1
-	google.golang.org/protobuf v1.31.1-0.20231027082548-f4a6c1f6e5c1
+	google.golang.org/protobuf v1.32.0
 	gopkg.in/mgo.v2 v2.0.0-20190816093944-a6b53ec6cb22
 )
 
@@ -204,7 +204,7 @@ require (
 	golang.org/x/exp v0.0.0-20230817173708-d852ddb80c63 // indirect
 	golang.org/x/exp/typeparams v0.0.0-20230224173230-c95f2b4c22f2 // indirect
 	golang.org/x/mod v0.12.0 // indirect
-	golang.org/x/sync v0.5.0 // indirect
+	golang.org/x/sync v0.6.0 // indirect
 	golang.org/x/sys v0.14.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	golang.org/x/tools v0.12.1-0.20230815132531-74c255bcf846 // indirect
