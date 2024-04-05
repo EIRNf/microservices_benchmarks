@@ -61,6 +61,8 @@ kubectl port-forward (podname) --address 0.0.0.0 4040:(podPort)
 - minikube delete && minikube start
 - cd deathstarbench-hotelreservation/helm_hotelReservation
 - helm upgrade --install (REALEASE_NAME) . --wait --set image.repository=eirn/dsbpp_hotel_reserv --set image.tag=(REALEASE_NAME) --set features.gcPercent=1000 --set features.memcTimeout=10 --debug
+helm upgrade --install shm . --wait --set image.repository=eirn/dsbpp_hotel_reserv --set image.tag=shm --set features.gcPercent=1000 --set features.memcTimeout=10 --debug
+
 
 // doesnt work 
 - helm uninstall (REALEASE_NAME)

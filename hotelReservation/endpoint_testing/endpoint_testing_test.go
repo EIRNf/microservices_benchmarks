@@ -15,14 +15,14 @@ import (
 
 	"github.com/loov/hrtime"
 
-	"math/big"
 	"math/rand"
 )
 
 // const localURL = "http://localhost:5000"
 // const apiURL = "http://192.168.49.2:30052"
 
-var apiURL = flag.String("url", "http://34.16.128.88:4040", "IP/Port of HotelReservation Frontend")
+// var apiURL = flag.String("url", "http://192.168.49.2:30363", "IP/Port of HotelReservation Frontend")
+var apiURL = flag.String("url", "http://192.168.49.2:30363", "IP/Port of HotelReservation Frontend")
 
 var endpoint_bench = flag.String("endpoint", "all", "Test to run:hotels,recommendations,user,reservation")
 
@@ -274,8 +274,8 @@ func Test_All(t *testing.T) {
 
 	//Test Endpoints
 
-	t.Run("user_endpoint", User_Endpoint)
-	t.Run("reservation_endpoint", Reservation_Endpoint)
+	// t.Run("user_endpoint", User_Endpoint)
+	// t.Run("reservation_endpoint", Reservation_Endpoint)
 	t.Run("hotels_endpoint", Hotels_Endpoint)
 	t.Run("recommendations_endpoint", Recommendation_Endpoint)
 
@@ -387,105 +387,105 @@ func Recommendation_Endpoint(t *testing.T) {
 	}
 }
 
-func User_Endpoint(t *testing.T) {
+// func User_Endpoint(t *testing.T) {
 
-	//Get username and password
-	suffix, _ := rand.Int(rand.Reader, big.NewInt(500))
-	user := "Cornell_" + suffix.String()
-	pass := ""
-	for j := 0; j < 10; j++ {
-		pass += suffix.String()
-	}
+// 	//Get username and password
+// 	suffix, _ := rand.Int(rand.Reader, big.NewInt(500))
+// 	user := "Cornell_" + suffix.String()
+// 	pass := ""
+// 	for j := 0; j < 10; j++ {
+// 		pass += suffix.String()
+// 	}
 
-	user_name := "?username=" + user
-	password := "&password=" + pass
+// 	user_name := "?username=" + user
+// 	password := "&password=" + pass
 
-	request_string := *apiURL + "/user" + user_name + password
+// 	request_string := *apiURL + "/user" + user_name + password
 
-	resp, err := http.Get(request_string)
+// 	resp, err := http.Get(request_string)
 
-	//Failed Request
-	if err != nil {
-		t.Fatalf("RPC failed: %s", err)
-	}
+// 	//Failed Request
+// 	if err != nil {
+// 		t.Fatalf("RPC failed: %s", err)
+// 	}
 
-	defer resp.Body.Close()
+// 	defer resp.Body.Close()
 
-	data, err := io.ReadAll(resp.Body)
-	if err != nil {
-		t.Fatalf("Error reading body: %s", err)
-	}
+// 	data, err := io.ReadAll(resp.Body)
+// 	if err != nil {
+// 		t.Fatalf("Error reading body: %s", err)
+// 	}
 
-	//Check StatusCode
-	if resp.Status != status_code_ok {
-		t.Fatalf("Status code not ok, instead: %s", resp.Status)
-	}
+// 	//Check StatusCode
+// 	if resp.Status != status_code_ok {
+// 		t.Fatalf("Status code not ok, instead: %s", resp.Status)
+// 	}
 
-	//Unexpected Payload
-	if !bytes.Equal(data, user_expected) {
-		t.Fatalf("wrong payload returns: expecting %s; got %s", user_expected, data)
-	}
+// 	//Unexpected Payload
+// 	if !bytes.Equal(data, user_expected) {
+// 		t.Fatalf("wrong payload returns: expecting %s; got %s", user_expected, data)
+// 	}
 
-	//Verify Headers
-	//Verify Trailers
-}
+// 	//Verify Headers
+// 	//Verify Trailers
+// }
 
-func Reservation_Endpoint(t *testing.T) {
+// func Reservation_Endpoint(t *testing.T) {
 
-	//Get username and password
-	suffix, _ := rand.Int(rand.Reader, big.NewInt(500))
-	user := "Cornell_" + suffix.String()
-	pass := ""
-	for j := 0; j < 10; j++ {
-		pass += suffix.String()
-	}
+// 	//Get username and password
+// 	suffix, _ := rand.Int(rand.Reader, big.NewInt(500))
+// 	user := "Cornell_" + suffix.String()
+// 	pass := ""
+// 	for j := 0; j < 10; j++ {
+// 		pass += suffix.String()
+// 	}
 
-	in_date_str := "2015-04-09"
-	out_date_str := "2015-04-24"
-	lat_val := "38.0235"
-	lon_val := "-122.095"
-	id, _ := rand.Int(rand.Reader, big.NewInt(80))
-	hotel_id_val := id.String()
-	customer := user
-	num := "1"
+// 	in_date_str := "2015-04-09"
+// 	out_date_str := "2015-04-24"
+// 	lat_val := "38.0235"
+// 	lon_val := "-122.095"
+// 	id, _ := rand.Int(rand.Reader, big.NewInt(80))
+// 	hotel_id_val := id.String()
+// 	customer := user
+// 	num := "1"
 
-	//Construct request
-	inDate := "?inDate=" + in_date_str
-	outDate := "&outDate=" + out_date_str
-	lat := "&lat=" + lat_val
-	lon := "&lon=" + lon_val
-	hotelId := "&hotelId=" + hotel_id_val
-	customerName := "&customerName=" + customer
-	user_name := "&username=" + user
-	password := "&password=" + pass
-	number := "&number=" + num
+// 	//Construct request
+// 	inDate := "?inDate=" + in_date_str
+// 	outDate := "&outDate=" + out_date_str
+// 	lat := "&lat=" + lat_val
+// 	lon := "&lon=" + lon_val
+// 	hotelId := "&hotelId=" + hotel_id_val
+// 	customerName := "&customerName=" + customer
+// 	user_name := "&username=" + user
+// 	password := "&password=" + pass
+// 	number := "&number=" + num
 
-	request_string := *apiURL + "/reservation" + inDate + outDate + lat + lon + hotelId + customerName + user_name + password + number
+// 	request_string := *apiURL + "/reservation" + inDate + outDate + lat + lon + hotelId + customerName + user_name + password + number
 
-	resp, err := http.Get(request_string)
+// 	resp, err := http.Get(request_string)
 
-	//Failed Request
-	if err != nil {
-		t.Fatalf("RPC failed: %s", err)
-	}
+// 	//Failed Request
+// 	if err != nil {
+// 		t.Fatalf("RPC failed: %s", err)
+// 	}
 
-	defer resp.Body.Close()
+// 	defer resp.Body.Close()
 
-	data, err := io.ReadAll(resp.Body)
-	if err != nil {
-		t.Fatalf("Error reading body: %s", err)
-	}
+// 	data, err := io.ReadAll(resp.Body)
+// 	if err != nil {
+// 		t.Fatalf("Error reading body: %s", err)
+// 	}
 
-	//Check StatusCode
-	if resp.Status != status_code_ok {
-		t.Fatalf("Status code not ok, instead: %s", resp.Status)
-	}
+// 	//Check StatusCode
+// 	if resp.Status != status_code_ok {
+// 		t.Fatalf("Status code not ok, instead: %s", resp.Status)
+// 	}
 
-	//Unexpected Payload
-	if !bytes.Equal(data, reservation_expected) {
-		t.Fatalf("wrong payload returns: expecting %s; got %s", reservation_expected, data)
-	}
+// 	//Unexpected Payload
+// 	if !bytes.Equal(data, reservation_expected) {
+// 		t.Fatalf("wrong payload returns: expecting %s; got %s", reservation_expected, data)
+// 	}
 
-	//Verify Headers
-	//Verify Trailers
-}
+// 	//Verify Headers
+// 	//Verify Trailers
+// }

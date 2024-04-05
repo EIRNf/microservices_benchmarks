@@ -5,7 +5,7 @@ reqs=$1
 num_instances=$2
 # output_dir=
 endpoint=hotels
-url=http://34.125.216.113:4040
+url=http://192.168.49.2:31361
 
 
 
