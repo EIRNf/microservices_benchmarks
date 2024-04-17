@@ -13,13 +13,14 @@ RUN git config --global http.sslverify false
 COPY . /go/src/github.com/harlow/go-micro-services
 WORKDIR /go/src/github.com/harlow/go-micro-services
 RUN go mod tidy
+RUN go mod vendor
+
 
 # # use local modified github.com/EIRNf/notnets_grpc instead of upstream one
 COPY ./notnets_grpc ./vendor/github.com/EIRNf/notnets_grpc
 COPY ./vendor/github.com/EIRNf/notnets_grpc /go/src/github.com/EIRNf/notnets_grpc
 
 ENV LD_LIBRARY_PATH=/go/src/github.com/harlow/go-micro-services/notnets_grpc/notnets_shm/libnotnets/bin
-# RUN go mod vendor
 
 # # use local modified github.com/hailocab/go-geoindex instead of upstream one
 # COPY ./vendor/github.com/hailocab/go-geoindex /go/src/github.com/harlow/go-micro-services/vendor/github.com/hailocab/go-geoindex 
