@@ -22,3 +22,7 @@ hotelReservation/endpoint_testing/jeager/profile/*
 hotelReservation/endpoint_testing/jeager/rate/*
 hotelReservation/endpoint_testing/jeager/reservation/*
 hotelReservation/endpoint_testing/jeager/jaeger-query/*
+endpoint_testing/runs/*
+endpoint_testing/local_runs/*
+hotelReservation/endpoint_testing/runs/*
+hotelReservation/endpoint_testing/local_runs/*
